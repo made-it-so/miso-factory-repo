@@ -1,0 +1,17 @@
+services:
+  orchestrator:
+    build: ./orchestrator_backend
+    ports: ["8080:8080"]
+    env_file: ./orchestrator_backend/backend.env
+    restart: unless-stopped
+  frontend:
+    build: ./ui_frontend
+    ports: ["80:80"]
+    depends_on: [orchestrator]
+    restart: unless-stopped
+  python_runner:
+    build: ./python_agent_runner
+    restart: unless-stopped
+  javascript_runner:
+    build: ./javascript_agent_runner
+    restart: unless-stopped
