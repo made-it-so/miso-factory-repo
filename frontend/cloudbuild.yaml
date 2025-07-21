@@ -1,0 +1,11 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: [
+    'build',
+    '-t', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/frontend:v0.2',
+    '-t', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/frontend:latest',
+    '.'
+  ]
+images:
+- 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/frontend:v0.2'
+- 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/frontend:latest'

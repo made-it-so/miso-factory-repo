@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  orchestrator:
+    image: us-east4-docker.pkg.dev/miso-final-1234/miso-factory/orchestrator:v0.2
+    container_name: miso-orchestrator
+    restart: always
+    ports: ["80:5001"]
+    volumes: ["/var/run/docker.sock:/var/run/docker.sock"]
+  python-agent:
+    image: us-east4-docker.pkg.dev/miso-final-1234/miso-factory/python-agent:v0.1
+    container_name: miso-python-agent
+    restart: always
+  frontend:
+    image: us-east4-docker.pkg.dev/miso-final-1234/miso-factory/frontend:v0.1
+    container_name: miso-frontend
+    restart: always
+    ports: ["8080:80"]
