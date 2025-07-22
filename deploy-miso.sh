@@ -3,8 +3,8 @@ set -e
 
 # Authenticate and set keys
 docker-credential-gcr configure-docker --registries=us-east4-docker.pkg.dev
-export GEMINI_API_KEY="PASTE_YOUR_GEMINI_API_KEY_HERE"
-export JWT_SECRET_KEY="PASTE_YOUR_JWT_SECRET_KEY_HERE"
+export GEMINI_API_KEY="$1"
+export JWT_SECRET_KEY="$2"
 
 # Stop, remove, pull all images
 sudo docker stop miso-orchestrator miso-python-agent miso-frontend || true
