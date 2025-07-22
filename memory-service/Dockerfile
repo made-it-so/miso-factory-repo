@@ -4,5 +4,4 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY src/ ./src/
 EXPOSE 5003
-# CORRECTED STARTUP COMMAND:
-CMD ["flask", "--app", "src/main", "run", "--host=0.0.0.0", "--port=5003"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5003", "src.main:app"]
