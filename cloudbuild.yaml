@@ -13,23 +13,15 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/frontend:latest']
 
-# --- ADD THIS NEW STEP ---
-# Remotely authenticate Docker on the VM
+# Step A: Remotely authenticate Docker on the VM as the default user
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['compute', 'ssh', 'miso-final-vm', '--zone=us-east4-c', '--command=sudo docker-credential-gcr configure-docker --registries=us-east4-docker.pkg.dev']
-# --- END NEW STEP ---
+  args: ['compute', 'ssh', 'miso-final-vm', '--zone=us-east4-c', '--command=docker-credential-gcr configure-docker --registries=us-east4-docker.pkg.dev']
 
-# Remotely pull the new images onto the VM
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['compute', 'ssh', 'miso-final-vm', '--zone=us-east4-c', '--command=sudo docker pull us-east4-docker.pkg.dev/miso-final-1234/miso-factory/orchestrator:latest']
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['compute', 'ssh', 'miso-final-vm', '--zone=us-east4-c', '--command=sudo docker pull us-east4-docker.pkg.dev/miso-final-1234/miso-factory/python-agent:latest']
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['compute', 'ssh', 'miso-final-vm', '--zone=us-east4-c', '--command=sudo docker pull us-east4-docker.pkg.dev/miso-final-1234/miso-factory/frontend:latest']
-
-# Copy and run the simplified deployment script
+# Step B: Copy the deployment script to the VM
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['compute', 'scp', 'deploy-miso.sh', 'miso-final-vm:~/deploy-miso.sh', '--zone=us-east4-c']
+
+# Step C: Run the deployment script on the VM
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['compute', 'ssh', 'miso-final-vm', '--zone=us-east4-c', '--command=bash deploy-miso.sh']
 
