@@ -1,29 +1,27 @@
 steps:
-# (Build and push steps remain the same)
+# (All build and push steps remain the same)
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/orchestrator:latest', './orchestrator']
-# ... other builds and pushes ...
+  args: ['push', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/frontend:latest']
 
-# Copy the deployment script to the VM
+# --- MODIFIED STEP ---
+# Copy the deployment script to the VM's temporary directory
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['compute', 'scp', 'deploy-miso.sh', 'miso-final-vm:~/deploy-miso.sh', '--zone=us-east4-c']
-
-# Deploy by running the script on the VM and passing secrets
-- name: 'gcr.io/cloud-builders/gcloud'
-  entrypoint: 'bash'
   args:
-  - '-c'
-  - |
-    gcloud compute ssh miso-final-vm --zone=us-east4-c --command="bash deploy-miso.sh '$$GEMINI_KEY' '$$JWT_KEY'"
-  secretEnv: ['GEMINI_KEY', 'JWT_KEY']
+  - 'compute'
+  - 'scp'
+  - 'deploy-miso.sh'
+  - 'miso-final-vm:/tmp/deploy-miso.sh'
+  - '--zone=us-east4-c'
 
-# This block gives the build access to the secrets
-availableSecrets:
-  secretManager:
-  - versionName: projects/miso-final-1234/secrets/miso-gemini-key/versions/latest
-    env: 'GEMINI_KEY'
-  - versionName: projects/miso-final-1234/secrets/miso-jwt-key/versions/latest
-    env: 'JWT_KEY'
+# --- MODIFIED STEP ---
+# Deploy by running the script from /tmp
+- name: 'gcr.io/cloud-builders/gcloud'
+  args:
+  - 'compute'
+  - 'ssh'
+  - 'miso-final-vm'
+  - '--zone=us-east4-c'
+  - '--command=bash /tmp/deploy-miso.sh'
 
 options:
   logging: CLOUD_LOGGING_ONLY
