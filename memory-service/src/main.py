@@ -4,6 +4,7 @@ import json
 from flask import Flask, jsonify, request, Response
 
 app = Flask(__name__)
+# The service name 'miso-redis' will be resolved by Docker's internal DNS.
 db = redis.Redis(host='miso-redis', port=6379, db=0, decode_responses=False)
 
 @app.route('/store', methods=['POST'])
@@ -22,6 +23,7 @@ def retrieve_memory(checksum):
     if data is None:
         return jsonify({"error": "Checksum not found"}), 404
     try:
+        # Return raw data with appropriate content type if it's JSON
         json.loads(data)
         return Response(data, mimetype='application/json')
     except json.JSONDecodeError:

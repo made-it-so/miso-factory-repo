@@ -1,11 +1,13 @@
 steps:
-# Build all three service images
+# Build all service images
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/orchestrator:latest', './orchestrator']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/python-agent:latest', './python-agent']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/frontend:latest', './frontend']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/memory-service:latest', './memory-service']
 
 # Push all images to the registry
 - name: 'gcr.io/cloud-builders/docker'
@@ -14,6 +16,12 @@ steps:
   args: ['push', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/python-agent:latest']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/frontend:latest']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/memory-service:latest']
+
+# Deploy by using the startup script on the VM
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['compute', 'instances', 'reset', 'miso-final-vm', '--zone=us-east4-c']
 
 options:
   logging: CLOUD_LOGGING_ONLY
