@@ -1,19 +1,16 @@
 #!/bin/bash
 set -e
 
-# Set the docker config path to a writable directory
-export DOCKER_CONFIG=/home/kyle/.docker
-
-# Authenticate Docker using sudo -E to preserve the DOCKER_CONFIG variable
-echo "Authenticating Docker with Google Cloud..."
-sudo -E docker-credential-gcr configure-docker --registries=us-east4-docker.pkg.dev
+# Run authentication as the default user, which has a writable home directory
+echo "Authenticating Docker..."
+docker-credential-gcr configure-docker --registries=us-east4-docker.pkg.dev
 
 # Set API keys (REPLACE PLACEHOLDERS)
 echo "Setting API keys..."
 export GEMINI_API_KEY="PASTE_YOUR_GEMINI_API_KEY_HERE"
 export JWT_SECRET_KEY="PASTE_YOUR_JWT_SECRET_KEY_HERE"
 
-# The rest of the script uses sudo for all docker commands
+# Run all Docker commands with sudo
 echo "Creating Docker network..."
 sudo docker network create miso-net || true
 
