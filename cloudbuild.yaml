@@ -1,27 +1,25 @@
 steps:
-# (All build and push steps remain the same)
+# --- BUILD STEPS MUST COME FIRST ---
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/orchestrator:latest', './orchestrator']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/python-agent:latest', './python-agent']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/frontend:latest', './frontend']
+
+# --- PUSH STEPS COME AFTER BUILDING ---
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/orchestrator:latest']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/python-agent:latest']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/frontend:latest']
 
-# --- MODIFIED STEP ---
-# Copy the deployment script to the VM's temporary directory
+# --- DEPLOYMENT STEPS (unchanged) ---
 - name: 'gcr.io/cloud-builders/gcloud'
-  args:
-  - 'compute'
-  - 'scp'
-  - 'deploy-miso.sh'
-  - 'miso-final-vm:/tmp/deploy-miso.sh'
-  - '--zone=us-east4-c'
-
-# --- MODIFIED STEP ---
-# Deploy by running the script from /tmp
+  args: ['compute', 'scp', 'deploy-miso.sh', 'miso-final-vm:~/deploy-miso.sh', '--zone=us-east4-c']
 - name: 'gcr.io/cloud-builders/gcloud'
-  args:
-  - 'compute'
-  - 'ssh'
-  - 'miso-final-vm'
-  - '--zone=us-east4-c'
-  - '--command=bash /tmp/deploy-miso.sh'
+  args: ['compute', 'ssh', 'miso-final-vm', '--zone=us-east4-c', '--command=bash deploy-miso.sh']
 
 options:
   logging: CLOUD_LOGGING_ONLY
