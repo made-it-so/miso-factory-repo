@@ -5,21 +5,13 @@ async function authorizedFetch(url, options = {}) {
         window.location.href = '/login.html';
         return;
     }
-
-    const headers = {
-        ...options.headers,
-        'Authorization': `Bearer ${token}`
-    };
-
-    // Prepend /api/ to all fetch requests
+    const headers = { ...options.headers, 'Authorization': `Bearer ${token}` };
     const api_url = `/api${url}`;
     const response = await fetch(api_url, { ...options, headers });
-
-    if (response.status === 401) { // Token is invalid or expired
+    if (response.status === 401) {
         localStorage.removeItem('miso_token');
         window.location.href = '/login.html';
     }
-    
     return response;
 }
 
@@ -29,18 +21,13 @@ if (window.location.pathname.includes('index.html') || window.location.pathname 
         window.location.href = '/login.html';
     }
 
-    const codeForm = document.getElementById('codeForm');
+    const getInfoButton = document.getElementById('getInfoButton');
     const responseOutput = document.getElementById('responseOutput');
     const logoutButton = document.getElementById('logoutButton');
 
-    codeForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        responseOutput.textContent = 'Sending prompt...';
-        const submitButton = codeForm.querySelector('input[type="submit"]');
-        submitButton.disabled = true;
-
-        const payload = { task: 'get_info' }; // Simplified for stability
-
+    getInfoButton.addEventListener('click', async () => {
+        responseOutput.textContent = 'Dispatching get_info task...';
+        const payload = { task: 'get_info' };
         try {
             const response = await authorizedFetch('/dispatch', {
                 method: 'POST',
@@ -52,8 +39,6 @@ if (window.location.pathname.includes('index.html') || window.location.pathname 
             responseOutput.textContent = JSON.stringify(data, null, 2);
         } catch (error) {
             responseOutput.textContent = `Error: ${error.message}`;
-        } finally {
-            submitButton.disabled = false;
         }
     });
 
@@ -70,10 +55,8 @@ if (window.location.pathname.includes('login.html')) {
         event.preventDefault();
         const errorMsg = document.getElementById('errorMsg');
         errorMsg.textContent = '';
-        
         const username = loginForm.username.value;
         const password = loginForm.password.value;
-
         try {
             const response = await fetch('/api/login', {
                 method: 'POST',
@@ -82,7 +65,6 @@ if (window.location.pathname.includes('login.html')) {
             });
             const data = await response.json();
             if (!response.ok) { throw new Error(data.message || 'Login failed'); }
-            
             localStorage.setItem('miso_token', data.token);
             window.location.href = '/index.html';
         } catch (error) {
