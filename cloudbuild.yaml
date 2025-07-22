@@ -1,33 +1,31 @@
 steps:
-# Build and push images
+# Build and push the service images
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/orchestrator:latest', './orchestrator']
+  args: ['build', '-t', 'us-east4-docker.pkg.dev/$PROJECT_ID/miso-factory/orchestrator:latest', './orchestrator']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/python-agent:latest', './python-agent']
+  args: ['build', '-t', 'us-east4-docker.pkg.dev/$PROJECT_ID/miso-factory/python-agent:latest', './python-agent']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/frontend:latest', './frontend']
+  args: ['build', '-t', 'us-east4-docker.pkg.dev/$PROJECT_ID/miso-factory/frontend:latest', './frontend']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/orchestrator:latest']
+  args: ['push', 'us-east4-docker.pkg.dev/$PROJECT_ID/miso-factory/orchestrator:latest']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/python-agent:latest']
+  args: ['push', 'us-east4-docker.pkg.dev/$PROJECT_ID/miso-factory/python-agent:latest']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/frontend:latest']
+  args: ['push', 'us-east4-docker.pkg.dev/$PROJECT_ID/miso-factory/frontend:latest']
 
-# Authenticate and pull images on the remote VM
+# Set the startup script on the VM
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['compute', 'ssh', 'miso-vm', '--zone=us-east4-c', '--command=sudo docker-credential-gcr configure-docker --registries=us-east4-docker.pkg.dev']
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['compute', 'ssh', 'miso-vm', '--zone=us-east4-c', '--command=sudo docker pull us-east4-docker.pkg.dev/miso-final-1234/miso-factory/orchestrator:latest']
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['compute', 'ssh', 'miso-vm', '--zone=us-east4-c', '--command=sudo docker pull us-east4-docker.pkg.dev/miso-final-1234/miso-factory/python-agent:latest']
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['compute', 'ssh', 'miso-vm', '--zone=us-east4-c', '--command=sudo docker pull us-east4-docker.pkg.dev/miso-final-1234/miso-factory/frontend:latest']
+  args:
+  - 'compute'
+  - 'instances'
+  - 'add-metadata'
+  - 'miso-final-vm'
+  - '--zone=us-east4-c'
+  - '--metadata-from-file=startup-script=./deploy-miso.sh'
 
-# Copy and run the deployment script
+# Trigger the startup script by resetting the VM
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['compute', 'scp', 'deploy-miso.sh', 'miso-vm:~/deploy-miso.sh', '--zone=us-east4-c']
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['compute', 'ssh', 'miso-vm', '--zone=us-east4-c', '--command=bash deploy-miso.sh']
+  args: ['compute', 'instances', 'reset', 'miso-final-vm', '--zone=us-east4-c']
 
 options:
   logging: CLOUD_LOGGING_ONLY
