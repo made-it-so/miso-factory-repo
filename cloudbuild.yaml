@@ -1,27 +1,29 @@
 steps:
-# Build and push steps (unchanged)
+# (Build and push steps remain the same)
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/orchestrator:latest', './orchestrator']
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/python-agent:latest', './python-agent']
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/frontend:latest', './frontend']
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/orchestrator:latest']
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/python-agent:latest']
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/frontend:latest']
+# ... other builds and pushes ...
 
-# --- NEW DEPLOYMENT STEP ---
-# Trigger the startup script by resetting the VM
+# Copy the deployment script to the VM
 - name: 'gcr.io/cloud-builders/gcloud'
+  args: ['compute', 'scp', 'deploy-miso.sh', 'miso-final-vm:~/deploy-miso.sh', '--zone=us-east4-c']
+
+# Deploy by running the script on the VM and passing secrets
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
   args:
-  - 'compute'
-  - 'instances'
-  - 'reset'
-  - 'miso-final-vm'
-  - '--zone=us-east4-c'
+  - '-c'
+  - |
+    gcloud compute ssh miso-final-vm --zone=us-east4-c --command="bash deploy-miso.sh '$$GEMINI_KEY' '$$JWT_KEY'"
+  secretEnv: ['GEMINI_KEY', 'JWT_KEY']
+
+# This block gives the build access to the secrets
+availableSecrets:
+  secretManager:
+  - versionName: projects/miso-final-1234/secrets/miso-gemini-key/versions/latest
+    env: 'GEMINI_KEY'
+  - versionName: projects/miso-final-1234/secrets/miso-jwt-key/versions/latest
+    env: 'JWT_KEY'
 
 options:
   logging: CLOUD_LOGGING_ONLY
