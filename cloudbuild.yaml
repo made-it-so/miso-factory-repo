@@ -22,3 +22,5 @@ steps:
 # Deploy by running the script on the VM
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['compute', 'ssh', 'miso-final-vm', '--zone=us-east4-c', '--command=bash deploy-miso.sh']
+options:
+  logging: CLOUD_LOGGING_ONLY
