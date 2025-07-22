@@ -13,17 +13,15 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/frontend:latest']
 
-# Step A: Remotely authenticate Docker on the VM as the default user
+# --- NEW DEPLOYMENT STEP ---
+# Trigger the startup script by resetting the VM
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['compute', 'ssh', 'miso-final-vm', '--zone=us-east4-c', '--command=docker-credential-gcr configure-docker --registries=us-east4-docker.pkg.dev']
-
-# Step B: Copy the deployment script to the VM
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['compute', 'scp', 'deploy-miso.sh', 'miso-final-vm:~/deploy-miso.sh', '--zone=us-east4-c']
-
-# Step C: Run the deployment script on the VM
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['compute', 'ssh', 'miso-final-vm', '--zone=us-east4-c', '--command=bash deploy-miso.sh']
+  args:
+  - 'compute'
+  - 'instances'
+  - 'reset'
+  - 'miso-final-vm'
+  - '--zone=us-east4-c'
 
 options:
   logging: CLOUD_LOGGING_ONLY
