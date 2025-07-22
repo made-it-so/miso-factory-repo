@@ -1,5 +1,5 @@
 steps:
-# Build and push all service images (steps remain the same)
+# Build and push all service images
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/orchestrator:latest', './orchestrator']
 - name: 'gcr.io/cloud-builders/docker'
