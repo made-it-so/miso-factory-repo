@@ -1,10 +1,6 @@
-// General function to handle API calls with the auth token
 async function authorizedFetch(url, options = {}) {
     const token = localStorage.getItem('miso_token');
-    if (!token) {
-        window.location.href = '/login.html';
-        return;
-    }
+    if (!token) { window.location.href = '/login.html'; return; }
     const headers = { ...options.headers, 'Authorization': `Bearer ${token}` };
     const api_url = `/api${url}`;
     const response = await fetch(api_url, { ...options, headers });
@@ -14,17 +10,11 @@ async function authorizedFetch(url, options = {}) {
     }
     return response;
 }
-
-// --- Main Page Logic ---
 if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
-    if (!localStorage.getItem('miso_token')) {
-        window.location.href = '/login.html';
-    }
-
+    if (!localStorage.getItem('miso_token')) { window.location.href = '/login.html'; }
     const getInfoButton = document.getElementById('getInfoButton');
     const responseOutput = document.getElementById('responseOutput');
     const logoutButton = document.getElementById('logoutButton');
-
     getInfoButton.addEventListener('click', async () => {
         responseOutput.textContent = 'Dispatching get_info task...';
         const payload = { task: 'get_info' };
@@ -37,18 +27,13 @@ if (window.location.pathname.includes('index.html') || window.location.pathname 
             const data = await response.json();
             if (!response.ok) { throw new Error(data.message || data.error || 'API Error'); }
             responseOutput.textContent = JSON.stringify(data, null, 2);
-        } catch (error) {
-            responseOutput.textContent = `Error: ${error.message}`;
-        }
+        } catch (error) { responseOutput.textContent = `Error: ${error.message}`; }
     });
-
     logoutButton.addEventListener('click', () => {
         localStorage.removeItem('miso_token');
         window.location.href = '/login.html';
     });
 }
-
-// --- Login Page Logic ---
 if (window.location.pathname.includes('login.html')) {
     const loginForm = document.getElementById('loginForm');
     loginForm.addEventListener('submit', async (event) => {
@@ -67,8 +52,6 @@ if (window.location.pathname.includes('login.html')) {
             if (!response.ok) { throw new Error(data.message || 'Login failed'); }
             localStorage.setItem('miso_token', data.token);
             window.location.href = '/index.html';
-        } catch (error) {
-            errorMsg.textContent = error.message;
-        }
+        } catch (error) { errorMsg.textContent = error.message; }
     });
 }
