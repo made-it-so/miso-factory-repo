@@ -1,5 +1,5 @@
 steps:
-# --- BUILD STEPS MUST COME FIRST ---
+# Build all three service images
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/orchestrator:latest', './orchestrator']
 - name: 'gcr.io/cloud-builders/docker'
@@ -7,19 +7,13 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/frontend:latest', './frontend']
 
-# --- PUSH STEPS COME AFTER BUILDING ---
+# Push all images to the registry
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/orchestrator:latest']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/python-agent:latest']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'us-east4-docker.pkg.dev/miso-final-1234/miso-factory/frontend:latest']
-
-# --- DEPLOYMENT STEPS (unchanged) ---
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['compute', 'scp', 'deploy-miso.sh', 'miso-final-vm:~/deploy-miso.sh', '--zone=us-east4-c']
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['compute', 'ssh', 'miso-final-vm', '--zone=us-east4-c', '--command=bash deploy-miso.sh']
 
 options:
   logging: CLOUD_LOGGING_ONLY
