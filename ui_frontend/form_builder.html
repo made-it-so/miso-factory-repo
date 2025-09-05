@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MISO Application Forge - Form Builder</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a; --text-color: #e0e0e0; --primary-color: #007acc;
+            --panel-bg-color: #2a2a2a; --border-color: #444; --font-family: sans-serif;
+            --input-bg: #333; --selected-bg: #004c8c;
+        }
+        body { background-color: var(--bg-color); color: var(--text-color); font-family: var(--font-family); margin: 0; display: flex; flex-direction: column; height: 100vh; }
+        header { padding: 1rem 2rem; border-bottom: 1px solid var(--border-color); font-size: 1.5rem; font-weight: bold; }
+        .main-container { display: flex; flex-grow: 1; overflow: hidden; }
+        .column { flex: 1; padding: 1rem; border-right: 1px solid var(--border-color); display: flex; flex-direction: column; }
+        .column:last-child { border-right: none; }
+        .column h3 { margin-top: 0; color: var(--primary-color); }
+        .column-content { flex-grow: 1; background-color: var(--panel-bg-color); border-radius: 4px; padding: 1rem; overflow-y: auto; }
+        .column-footer { padding-top: 1rem; }
+        ul { list-style: none; padding: 0; margin: 0; }
+        li { padding: 0.75rem; border-radius: 4px; cursor: pointer; border: 1px solid transparent; }
+        li:hover { background-color: #383838; }
+        li.selected { background-color: var(--selected-bg); border-color: var(--primary-color); }
+        input[type="text"], select { width: calc(100% - 80px); background-color: var(--input-bg); color: var(--text-color); border: 1px solid var(--border-color); padding: 8px; border-radius: 4px; }
+        button { background-color: var(--primary-color); color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; margin-left: 8px; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <header>MISO Application Forge: Data Modeling</header>
+    <div class="main-container">
+        <div class="column">
+            <h3>Data Models</h3>
+            <div class="column-content">
+                <ul id="models-list"></ul>
+            </div>
+            <div class="column-footer">
+                <input type="text" id="new-model-name" placeholder="New model name...">
+                <button id="add-model-btn">Add</button>
+            </div>
+        </div>
+
+        <div id="fields-column" class="column hidden">
+            <h3 id="fields-header">Fields</h3>
+            <div class="column-content">
+                <ul id="fields-list"></ul>
+            </div>
+            <div class="column-footer">
+                <input type="text" id="new-field-name" placeholder="New field name...">
+                <button id="add-field-btn">Add</button>
+            </div>
+        </div>
+
+        <div id="details-column" class="column hidden">
+            <h3 id="details-header">Field Properties</h3>
+            <div class="column-content">
+                <label for="data-type-select">Data Type:</label>
+                <select id="data-type-select">
+                    <option>Text</option>
+                    <option>Number</option>
+                    <option>Date</option>
+                    <option>True/False</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+<script>
+    const dataStore = {}; // e.g., { "Book": [{ name: "Title", type: "Text" }] }
+    let selectedModel = null;
+    let selectedField = null;
+
+    // --- DOM Elements ---
+    const modelsList = document.getElementById('models-list');
+    const fieldsList = document.getElementById('fields-list');
+    const fieldsColumn = document.getElementById('fields-column');
+    const detailsColumn = document.getElementById('details-column');
+    const addModelBtn = document.getElementById('add-model-btn');
+    const newModelNameInput = document.getElementById('new-model-name');
+    const addFieldBtn = document.getElementById('add-field-btn');
+    const newFieldNameInput = document.getElementById('new-field-name');
+    const dataTypeSelect = document.getElementById('data-type-select');
+
+    // --- Render Functions ---
+    function renderModels() {
+        modelsList.innerHTML = '';
+        Object.keys(dataStore).forEach(modelName => {
+            const li = document.createElement('li');
+            li.textContent = modelName;
+            li.dataset.modelName = modelName;
+            if (modelName === selectedModel) {
+                li.classList.add('selected');
+            }
+            modelsList.appendChild(li);
+        });
+    }
+
+    function renderFields() {
+        fieldsList.innerHTML = '';
+        if (selectedModel && dataStore[selectedModel]) {
+            fieldsColumn.classList.remove('hidden');
+            document.getElementById('fields-header').textContent = `Fields for "${selectedModel}"`;
+            dataStore[selectedModel].forEach(field => {
+                const li = document.createElement('li');
+                li.textContent = `${field.name} (${field.type})`;
+                li.dataset.fieldName = field.name;
+                 if (field.name === selectedField) {
+                    li.classList.add('selected');
+                }
+                fieldsList.appendChild(li);
+            });
+        } else {
+            fieldsColumn.classList.add('hidden');
+        }
+    }
+
+    function renderDetails() {
+        if (selectedModel && selectedField) {
+            detailsColumn.classList.remove('hidden');
+            document.getElementById('details-header').textContent = `Properties for "${selectedField}"`;
+            const field = dataStore[selectedModel].find(f => f.name === selectedField);
+            dataTypeSelect.value = field.type;
+        } else {
+            detailsColumn.classList.add('hidden');
+        }
+    }
+
+    // --- Event Handlers ---
+    addModelBtn.addEventListener('click', () => {
+        const modelName = newModelNameInput.value.trim();
+        if (modelName && !dataStore[modelName]) {
+            dataStore[modelName] = [];
+            newModelNameInput.value = '';
+            renderModels();
+        }
+    });
+
+    addFieldBtn.addEventListener('click', () => {
+        const fieldName = newFieldNameInput.value.trim();
+        if (selectedModel && fieldName && !dataStore[selectedModel].some(f => f.name === fieldName)) {
+            dataStore[selectedModel].push({ name: fieldName, type: 'Text' });
+            newFieldNameInput.value = '';
+            renderFields();
+        }
+    });
+
+    modelsList.addEventListener('click', (e) => {
+        if (e.target.tagName === 'LI') {
+            selectedModel = e.target.dataset.modelName;
+            selectedField = null; // Reset field selection
+            renderModels();
+            renderFields();
+            renderDetails();
+        }
+    });
+
+    fieldsList.addEventListener('click', (e) => {
+        if (e.target.tagName === 'LI') {
+            selectedField = e.target.dataset.fieldName;
+            renderFields();
+            renderDetails();
+        }
+    });
+
+    dataTypeSelect.addEventListener('change', (e) => {
+        if (selectedModel && selectedField) {
+            const field = dataStore[selectedModel].find(f => f.name === selectedField);
+            field.type = e.target.value;
+            renderFields(); // Re-render to show the updated type
+        }
+    });
+
+    // Initial Render
+    renderModels();
+</script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: A minimal test to create a single Log Group.
+
+Resources:
+  MinimalTestLogGroup:
+    Type: AWS::CloudWatch::Logs::LogGroup
+    Properties:
+      LogGroupName: /miso/minimal-test-success

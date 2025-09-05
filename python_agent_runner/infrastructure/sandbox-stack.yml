@@ -1,0 +1,95 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  MISO Colosseum Sandbox Environment. Creates an isolated VPC with a NAT Gateway, ECS Cluster, ECR Repo,
+  and necessary roles for testing agent-generated code.
+
+Resources:
+  # -- NETWORKING --
+  SandboxVPC:
+    Type: AWS::EC2::VPC
+    Properties: {CidrBlock: 10.10.0.0/16, EnableDnsSupport: true, EnableDnsHostnames: true, Tags: [{Key: Name, Value: MISO-Colosseum-VPC}]}
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties: {VpcId: !Ref SandboxVPC, CidrBlock: 10.10.1.0/24, MapPublicIpOnLaunch: true, Tags: [{Key: Name, Value: MISO-Colosseum-Public-Subnet}]}
+  PrivateSubnet:
+    Type: AWS::EC2::Subnet
+    Properties: {VpcId: !Ref SandboxVPC, CidrBlock: 10.10.2.0/24, MapPublicIpOnLaunch: false, Tags: [{Key: Name, Value: MISO-Colosseum-Private-Subnet}]}
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties: {Tags: [{Key: Name, Value: MISO-Colosseum-IGW}]}
+  VPCGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties: {VpcId: !Ref SandboxVPC, InternetGatewayId: !Ref InternetGateway}
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties: {VpcId: !Ref SandboxVPC, Tags: [{Key: Name, Value: MISO-Colosseum-Public-RT}]}
+  PublicRoute:
+    Type: AWS::EC2::Route
+    Properties: {RouteTableId: !Ref PublicRouteTable, DestinationCidrBlock: 0.0.0.0/0, GatewayId: !Ref InternetGateway}
+  PublicSubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties: {SubnetId: !Ref PublicSubnet, RouteTableId: !Ref PublicRouteTable}
+  SandboxSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties: {GroupName: MISO-Colosseum-SG, GroupDescription: "Security group for the MISO Colosseum sandbox environment", VpcId: !Ref SandboxVPC, Tags: [{Key: Name, Value: MISO-Colosseum-SG}]}
+  
+  # --- NEW: NAT GATEWAY RESOURCES ---
+  NatGatewayEIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+  NatGateway:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NatGatewayEIP.AllocationId
+      SubnetId: !Ref PublicSubnet
+      Tags:
+        - Key: Name
+          Value: MISO-Colosseum-NAT-GW
+  PrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref SandboxVPC
+      Tags:
+        - Key: Name
+          Value: MISO-Colosseum-Private-RT
+  PrivateRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NatGateway
+  PrivateSubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PrivateSubnet
+      RouteTableId: !Ref PrivateRouteTable
+
+  # -- ECS, ECR, LOGGING, IAM (Unchanged) --
+  SandboxECSCluster: {Type: AWS::ECS::Cluster, Properties: {ClusterName: MISO-Colosseum-Cluster}}
+  ChallengerECRRepository: {Type: AWS::ECR::Repository, Properties: {RepositoryName: miso/colosseum-challengers, ImageScanningConfiguration: {ScanOnPush: true}}}
+  SandboxLogGroup: {Type: AWS::Logs::LogGroup, Properties: {LogGroupName: /miso/colosseum-sandbox, RetentionInDays: 7}}
+  SandboxECSTaskExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: MISO-Colosseum-TaskExecutionRole
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal: {Service: [ecs-tasks.amazonaws.com]}
+          Action: ['sts:AssumeRole']
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+      Policies:
+        - PolicyName: MISO-Colosseum-LoggingPolicy
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action: ["logs:CreateLogStream", "logs:PutLogEvents"]
+                Resource: !GetAtt SandboxLogGroup.Arn
+
+Outputs:
+  # ... (Outputs are unchanged) ...
+  ClusterName: {Description: The name of the ECS cluster for the sandbox., Value: !Ref SandboxECSCluster}
+  RepositoryURI: {Description: The URI of the ECR repository, Value: !GetAtt ChallengerECRRepository.RepositoryUri}
+  SecurityGroupId: {Description: The ID of the sandbox security group., Value: !Ref SandboxSecurityGroup}

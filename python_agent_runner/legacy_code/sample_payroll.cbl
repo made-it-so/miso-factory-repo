@@ -1,0 +1,47 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. SIMPLE-PAYROLL.
+       AUTHOR. MISO.
+       
+       ENVIRONMENT DIVISION.
+       INPUT-OUTPUT SECTION.
+       FILE-CONTROL.
+           SELECT EMPLOYEE-FILE ASSIGN TO 'EMPLOYEE.DAT'
+               ORGANIZATION IS LINE SEQUENTIAL.
+           SELECT PAY-REPORT ASSIGN TO 'PAYREPORT.LST'
+               ORGANIZATION IS LINE SEQUENTIAL.
+       
+       DATA DIVISION.
+       FILE SECTION.
+       FD  EMPLOYEE-FILE.
+       01  EMPLOYEE-RECORD.
+           05 EMP-ID         PIC 9(5).
+           05 EMP-NAME       PIC X(20).
+           05 EMP-HOURS      PIC 9(2).
+           05 EMP-PAY-RATE   PIC 9(3)V99.
+       
+       FD  PAY-REPORT.
+       01  REPORT-LINE      PIC X(80).
+
+       WORKING-STORAGE SECTION.
+       01  WS-GROSS-PAY     PIC 9(5)V99.
+       01  WS-EOF           PIC A(1) VALUE 'N'.
+
+       PROCEDURE DIVISION.
+       MAIN-PARA.
+           OPEN INPUT EMPLOYEE-FILE.
+           OPEN OUTPUT PAY-REPORT.
+           PERFORM UNTIL WS-EOF = 'Y'
+               READ EMPLOYEE-FILE
+                   AT END MOVE 'Y' TO WS-EOF
+                   NOT AT END PERFORM CALCULATE-PAY-PARA
+               END-READ
+           END-PERFORM.
+           CLOSE EMPLOYEE-FILE, PAY-REPORT.
+           STOP RUN.
+
+       CALCULATE-PAY-PARA.
+           MULTIPLY EMP-HOURS BY EMP-PAY-RATE GIVING WS-GROSS-PAY.
+           STRING "Employee: ", EMP-NAME, " Gross Pay: ", WS-GROSS-PAY
+               DELIMITED BY SIZE
+               INTO REPORT-LINE.
+           WRITE REPORT-LINE.

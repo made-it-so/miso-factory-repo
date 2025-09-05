@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  miso-dev-env:
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    ports:
+      - "8888:8080" # Host port changed to 8888
+    volumes:
+      - .:/app

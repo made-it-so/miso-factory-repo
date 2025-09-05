@@ -1,0 +1,31 @@
+{
+    "family": "miso-sandbox-test",
+    "networkMode": "awsvpc",
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "256",
+    "memory": "512",
+    "executionRoleArn": "arn:aws:iam::356206423360:role/MISO-Colosseum-TaskExecutionRole",
+    "containerDefinitions": [
+        {
+            "name": "hello-world",
+            "image": "356206423360.dkr.ecr.us-east-1.amazonaws.com/miso/colosseum-challengers:hello-world",
+            "essential": true,
+            "portMappings": [
+                {
+                    "containerPort": 80,
+                    "protocol": "tcp"
+                }
+            ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/miso/colosseum-sandbox",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-stream-prefix": "test"
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,44 @@
+<body>
+    <div class="miso-hub">
+        <header class="header"><h1>MISO Hub</h1></header>
+        <main class="chat-window" id="chat-window">
+            <div class="message miso"><div class="message-bubble">I am MISO. How can I help you build, analyze, or improve your project today?</div></div>
+        </main>
+        <footer class="input-area">
+            </footer>
+    </div>
+
+    <script>
+        // ... (All existing variables and the first part of the script are the same) ...
+
+        async function handleUserInput() {
+            const question = userInput.value.trim();
+            // ... (rest of the handleUserInput function is the same) ...
+            
+            // --- MODIFIED LOGIC ---
+            // A simple heuristic to decide which endpoint to call.
+            // In a real system, the Catalyst Agent would make this routing decision.
+            const forge_keywords = ['build', 'create', 'make an app', 'design a tool'];
+            if (forge_keywords.some(k => question.toLowerCase().includes(k)) && !imageFile) {
+                // Application Forge path
+                addMessage('miso', 'An interesting idea. I will begin the Discovery Interview to clarify the project scope...');
+                const response = await fetch('/api/discovery/start', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ idea_description: question })
+                });
+                const data = await response.json();
+                const resultText = **Discovery Analysis Complete:**\nClarity Score: /100\nProposed Metaphor: "";
+                addMessage('miso', resultText);
+
+            } else if (imageFile) {
+                // Vision-to-Code path (unchanged)
+            } else {
+                // Catalyst Agent path (unchanged)
+            }
+        }
+        
+        // ... (rest of the helper functions are the same) ...
+    </script>
+</body>
+</html>

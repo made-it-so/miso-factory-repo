@@ -1,0 +1,23 @@
+{
+    "family": "miso-orchestrator-task",
+    "networkMode": "awsvpc",
+    "requiresCompatibilities": ["FARGATE"],
+    "cpu": "256",
+    "memory": "512",
+    "executionRoleArn": "arn:aws:iam::356206423360:role/ecsTaskExecutionRole",
+    "taskRoleArn": "arn:aws:iam::356206423360:role/MisoOrchestratorTaskRole",
+    "containerDefinitions": [
+        {
+            "name": "miso-orchestrator",
+            "image": "356206423360.dkr.ecr.us-east-1.amazonaws.com/miso-orchestrator:latest",
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/miso-orchestrator",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            }
+        }
+    ]
+}

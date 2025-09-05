@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MISO Application Forge - Mind Map</title>
+    <style>
+        :root {
+            --bg-color: #2a2a2a; --text-color: #e0e0e0; --primary-color: #007acc;
+            --feature-bg: #0d47a1; --story-bg: #1b5e20; --req-bg: #b71c1c;
+            --border-color: #444; --font-family: sans-serif;
+        }
+        body { background-color: var(--bg-color); color: var(--text-color); font-family: var(--font-family); margin: 0; }
+        #toolbar { padding: 10px; background-color: #333; border-bottom: 1px solid var(--border-color); }
+        #toolbar button { background-color: var(--primary-color); color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; }
+        #canvas { position: relative; width: 100vw; height: 90vh; overflow: hidden; background-image: radial-gradient(#444 1px, transparent 1px); background-size: 20px 20px; }
+        .node { position: absolute; padding: 15px; border: 1px solid var(--border-color); box-shadow: 0 4px 8px rgba(0,0,0,0.5); user-select: none; touch-action: none; box-sizing: border-box; }
+        .feature { background-color: var(--feature-bg); border-radius: 4px; }
+        .story { background-color: var(--story-bg); border-radius: 15px; }
+        .requirement { background-color: var(--req-bg); border-radius: 50%; width: 120px; height: 120px; display: flex; align-items: center; justify-content: center; text-align: center; }
+        .node-text { width: 100%; height: 100%; background: transparent; border: none; color: var(--text-color); resize: none; text-align: center; font-size: 14px; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leader-line-new/leader-line.min.js"></script>
+</head>
+<body>
+
+<div id="toolbar">
+    <button onclick="createNode('feature')">New Feature</button>
+    <button onclick="createNode('story')">New User Story</button>
+    <button onclick="createNode('requirement')">New Requirement</button>
+</div>
+
+<div id="canvas"></div>
+
+<script>
+    const canvas = document.getElementById('canvas');
+    let nodeCounter = 0;
+    const lines = [];
+
+    function createNode(type) {
+        nodeCounter++;
+        const nodeId = 'node-' + nodeCounter;
+        
+        const node = document.createElement('div');
+        node.id = nodeId;
+        node.className = 'node ' + type;
+        node.style.left = (Math.random() * 500) + 'px';
+        node.style.top = (Math.random() * 300) + 'px';
+
+        const textArea = document.createElement('textarea');
+        textArea.className = 'node-text';
+        textArea.value = `New ${type}`;
+        node.appendChild(textArea);
+        
+        canvas.appendChild(node);
+        
+        interact(node)
+            .draggable({
+                listeners: {
+                    move(event) {
+                        const target = event.target;
+                        const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+                        const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+                        target.style.transform = `translate(${x}px, ${y}px)`;
+                        target.setAttribute('data-x', x);
+                        target.setAttribute('data-y', y);
+                        lines.forEach(line => line.position());
+                    }
+                }
+            });
+    }
+
+    // This is a simplified connection logic. A full implementation would be more complex.
+    let startNode = null;
+    canvas.addEventListener('click', (event) => {
+        const node = event.target.closest('.node');
+        if (node) {
+            if (!startNode) {
+                startNode = node;
+                startNode.style.border = '2px solid cyan';
+            } else {
+                if (startNode !== node) {
+                    const line = new LeaderLine(startNode, node, { color: 'var(--primary-color)', size: 3 });
+                    lines.push(line);
+                }
+                startNode.style.border = '1px solid var(--border-color)';
+                startNode = null;
+            }
+        }
+    });
+
+</script>
+</body>
+</html>

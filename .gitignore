@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# IDE files
+.vscode/
+.idea/
+
+# Uploaded Logs
+*.txt
