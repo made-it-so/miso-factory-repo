@@ -1,12 +1,29 @@
 # Python
 __pycache__/
-*.pyc
-venv/
+*.py[cod]
+*$py.class
+
+# Virtual environment
 .venv/
+venv/
+ENV/
+
+# Environment variables
+.env
+
+# Instance Folder
+instance/
 
 # IDE files
 .vscode/
 .idea/
 
-# Uploaded Logs
-*.txt
+# MISO specific untracked files
+*.pem
+*.log
+mindmap_test.html
+launcher.py
+forge-stack.yml
+/certbot/
+/nginx/
+/ollama/

@@ -1,0 +1,6 @@
+Flask
+waitress
+boto3
+python-dotenv
+
+ollama
