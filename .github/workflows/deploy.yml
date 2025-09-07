@@ -19,7 +19,16 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd ~/miso-factory-repo
+            # Define absolute paths for robustness
+            PROJECT_DIR="/home/ec2-user/miso-factory-repo/python_agent_runner"
+            VENV_GUNICORN="/home/ec2-user/miso-factory-repo/python_agent_runner/venv/bin/gunicorn"
+
+            # Pull the latest code
+            cd /home/ec2-user/miso-factory-repo
             git pull
+
+            # Stop the old server session if it exists
             tmux kill-session -t miso || true
-            tmux new -d -s miso ./start_server.sh
+
+            # Start the new server in a detached tmux session using absolute paths
+            tmux new -d -s miso "cd $PROJECT_DIR && $VENV_GUNICORN --workers 3 --bind 127.0.0.1:5000 app:app"
