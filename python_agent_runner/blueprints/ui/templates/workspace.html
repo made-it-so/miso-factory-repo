@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MISO Application Forge</title>
+    <link rel="stylesheet" href="{{ url_for('ui.static', filename='style.css') }}">
+</head>
+<body>
+    <div class="miso-forge-container">
+        <div class="panel" id="blueprint-panel"><div class="panel-header"><h2>Living Blueprint</h2></div><div class="panel-content" id="blueprint-panel-content"></div></div>
+        <div class="panel" id="workspace-panel"><div class="panel-header"><h2>Workspace</h2></div><div class="panel-content" id="workspace-panel-content"></div></div>
+        <div class="panel" id="chat-panel"><div class="panel-header"><h2>MISO Concierge</h2></div><div class="panel-content" id="chat-messages"></div><div class="chat-input-area"><input type="text" id="chat-input" placeholder="Describe..."><button id="send-button">Send</button></div></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="{{ url_for('ui.static', filename='script.js', v=version) }}" defer></script>
+</body>
+</html>

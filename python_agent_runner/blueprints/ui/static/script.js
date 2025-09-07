@@ -1,100 +1,76 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const chatHistory = document.getElementById('chat-history');
-    const inputArea = document.getElementById('input-area');
-    const clarityBar = document.getElementById('clarity-indicator-bar');
-    
-    const liveObjective = document.getElementById('live-objective');
-    const liveOutputFormat = document.getElementById('live-output-format');
-    const liveDataSource = document.getElementById('live-data-source');
-    const finalActivationArea = document.getElementById('final-activation-area');
+/**
+ * MISO Application Forge - Living Blueprint UI
+ * script.js - v7.0 (Mermaid.js Implementation)
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    const chatInput = document.getElementById('chat-input');
+    const sendButton = document.getElementById('send-button');
+    const chatMessages = document.getElementById('chat-messages');
+    const blueprintPanel = document.getElementById('blueprint-panel-content');
+    const workspacePanel = document.getElementById('workspace-panel-content');
 
-    let conversationState = {};
+    // Initialize Mermaid.js
+    mermaid.initialize({ startOnLoad: false, theme: 'dark' });
 
-    function addMessage(sender, text, isHtml = false) {
-        const messageDiv = document.createElement('div');
-        messageDiv.classList.add('chat-message', ${sender}-message);
-        if (isHtml) {
-            messageDiv.innerHTML = text;
-        } else {
-            messageDiv.textContent = text;
+    const addMessage = (sender, text) => {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message', `${sender.toLowerCase()}-message`);
+        const textSpan = document.createElement('span'); textSpan.innerHTML = text;
+        messageElement.innerHTML = `<strong class="sender">${sender}:</strong> `;
+        messageElement.appendChild(textSpan);
+        chatMessages.appendChild(messageElement);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    };
+
+    const updatePanels = async (blueprintContent, workspaceContent) => {
+        const MERMAID_PREFIX = "MERMAID_DATA:";
+        if (blueprintContent && blueprintContent.startsWith(MERMAID_PREFIX)) {
+            const mermaidText = blueprintContent.substring(MERMAID_PREFIX.length);
+            blueprintPanel.innerHTML = `<div class="mermaid">${mermaidText}</div>`;
+            await mermaid.run({ nodes: [blueprintPanel.firstChild] });
+        } else if (blueprintContent) {
+            blueprintPanel.innerHTML = blueprintContent;
         }
-        chatHistory.appendChild(messageDiv);
-        chatHistory.scrollTop = chatHistory.scrollHeight;
-    }
-
-    function updateLivePrompt() {
-        liveObjective.textContent = conversationState.objective || '...';
-        liveOutputFormat.textContent = conversationState.output_format || '...';
-        liveDataSource.textContent = conversationState.data_source || '...';
-    }
-
-    async function sendMessage(message) {
-        if (message) {
-            addMessage('user', message);
+        if (workspaceContent) {
+            workspacePanel.innerHTML = workspaceContent;
         }
-        
+    };
+
+    const processMisoResponse = async (userInput) => {
+        let data;
         try {
             const response = await fetch('/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ state: conversationState, last_message: message })
+                body: JSON.stringify({ message: userInput }),
             });
-            const data = await response.json();
-            
-            conversationState = data.state;
-            updateLivePrompt();
-            updateClarity(data.clarity_score);
-            renderMisoResponse(data);
-
+            if (!response.ok) throw new Error(`Server returned status ${response.status}`);
+            data = await response.json();
+        } catch (error) { addMessage('MISO', `Error: Failed to fetch response.`); return; }
+        
+        try {
+            addMessage('MISO', data.response);
+            await updatePanels(data.blueprint, data.workspace);
         } catch (error) {
-            console.error('Error with chat API:', error);
-            addMessage('miso', 'Sorry, I encountered an error.');
+            console.error("Error updating UI panels:", error);
+            addMessage('MISO', `UI Error: Failed to render visuals.`);
         }
-    }
+    };
 
-    function renderMisoResponse(data) {
-        addMessage('miso', data.response_text);
+    const handleUserInput = () => {
+        const userInput = chatInput.value.trim(); if (userInput === '') return;
+        addMessage('User', userInput); chatInput.value = ''; chatInput.focus();
+        processMisoResponse(userInput);
+    };
 
-        switch(data.response_type) {
-            case 'suggestions':
-                const suggestionsHtml = data.options.map(opt => <button class='suggestion-btn' data-value=''></button>).join('');
-                addMessage('miso', suggestionsHtml, true);
-                document.querySelectorAll('.suggestion-btn').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        sendMessage(btn.dataset.value);
-                    });
-                });
-                break;
-            case 'file_upload':
-                addMessage('miso', <input type='file' class='form-control mt-2'>, true);
-                break;
-            case 'final_prompt':
-                finalActivationArea.innerHTML = 
-                    <hr>
-                    <form action="/submit_proposal" method="POST" class="mt-3">
-                        <input type="hidden" name="objective" value="">
-                        <button type="submit" class="btn btn-success w-100">Approve & Activate MISO</button>
-                    </form>
-                ;
-                inputArea.innerHTML = '<p class="text-center text-success">Conversation complete. Please review and activate.</p>';
-                break;
-        }
-    }
+    sendButton.addEventListener('click', handleUserInput);
+    chatInput.addEventListener('keypress', (event) => { if (event.key === 'Enter') handleUserInput(); });
 
-    function updateClarity(score) {
-        clarityBar.style.width = ${score}%;
-        clarityBar.textContent = ${score}% Complete;
-        if (score < 50) clarityBar.className = 'progress-bar progress-bar-striped progress-bar-animated bg-danger';
-        else if (score < 100) clarityBar.className = 'progress-bar progress-bar-striped progress-bar-animated bg-warning';
-        else clarityBar.className = 'progress-bar bg-success';
-    }
+    const initializeUI = () => {
+        updatePanels("// Blueprint...", "");
+        setTimeout(() => addMessage('MISO', 'Connection established.'), 500);
+        chatInput.focus();
+    };
 
-    inputArea.querySelector('form').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const input = inputArea.querySelector('input');
-        sendMessage(input.value);
-        input.value = '';
-    });
-
-    sendMessage(null);
+    initializeUI();
 });
