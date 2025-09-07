@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MISO - The Gauntlet</title>
+    <link rel="stylesheet" href="{{ url_for('ui.static', filename='style.css') }}">
+    <style>
+        .gauntlet-container { padding: 20px; text-align: center; }
+        .competition-area { display: flex; justify-content: center; gap: 20px; margin: 20px; }
+        .competitor { flex: 1; border: 1px dashed var(--border-color); padding: 15px; background-color: #1a1a1d; max-width: 500px; }
+        .competitor h3 { margin-bottom: 15px; }
+        .vote-buttons button { font-size: 1.2em; padding: 10px 20px; margin: 0 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="gauntlet-container">
+        <h1>The Gauntlet</h1>
+        <p>Review the two AI-generated designs below and vote for the winner.</p>
+        
+        <div class="competition-area">
+            <div class="competitor" id="designA">
+                <h3>Design A</h3>
+                {{ design_a | safe }}
+            </div>
+            <div class="competitor" id="designB">
+                <h3>Design B</h3>
+                {{ design_b | safe }}
+            </div>
+        </div>
+
+        <div class="vote-buttons">
+            <button id="voteA">Vote for A</button>
+            <button id="voteB">Vote for B</button>
+        </div>
+        <p id="feedbackStatus" style="color: var(--accent-color);"></p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const voteA = document.getElementById('voteA');
+            const voteB = document.getElementById('voteB');
+            const statusEl = document.getElementById('feedbackStatus');
+
+            const submitVote = async (winner) => {
+                voteA.disabled = true;
+                voteB.disabled = true;
+                statusEl.textContent = 'Submitting vote...';
+
+                await fetch('/api/gauntlet/submit_vote', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ winner: winner, timestamp: new Date().toISOString() })
+                });
+
+                statusEl.textContent = 'Vote recorded! Refresh for a new Gauntlet.';
+            };
+
+            voteA.addEventListener('click', () => submitVote('A'));
+            voteB.addEventListener('click', () => submitVote('B'));
+        });
+    </script>
+</body>
+</html>

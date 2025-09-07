@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MISO - UI Arena</title>
+    <link rel="stylesheet" href="{{ url_for('ui.static', filename='style.css') }}">
+    <style>
+        .arena-container { padding: 20px; text-align: center; }
+        .component-display { border: 1px dashed var(--border-color); padding: 20px; margin: 20px auto; max-width: 400px; background-color: #1a1a1d; }
+        .feedback-buttons button { font-size: 1.2em; padding: 15px 30px; margin: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="arena-container">
+        <h1>UI Arena</h1>
+        <p>Review the AI-generated component below and provide your feedback.</p>
+        
+        <div class="component-display">
+            {{ component_html | safe }}
+        </div>
+
+        <div class="feedback-buttons">
+            <button id="goodBtn">Good Design</button>
+            <button id="badBtn">Bad Design</button>
+        </div>
+        <p id="feedbackStatus" style="color: var(--accent-color);"></p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const componentName = '{{ component_name }}';
+            const goodBtn = document.getElementById('goodBtn');
+            const badBtn = document.getElementById('badBtn');
+            const statusEl = document.getElementById('feedbackStatus');
+
+            const sendFeedback = async (rating) => {
+                goodBtn.disabled = true;
+                badBtn.disabled = true;
+                statusEl.textContent = 'Submitting feedback...';
+
+                await fetch('/api/arena/submit_feedback', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        component: componentName,
+                        rating: rating,
+                        timestamp: new Date().toISOString()
+                    })
+                });
+
+                statusEl.textContent = 'Thank you for your feedback! Refresh for a new challenge.';
+            };
+
+            goodBtn.addEventListener('click', () => sendFeedback('good'));
+            badBtn.addEventListener('click', () => sendFeedback('bad'));
+        });
+    </script>
+</body>
+</html>

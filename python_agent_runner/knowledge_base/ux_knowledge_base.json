@@ -1,0 +1,11 @@
+{
+    "Login Component": {
+        "principles": [
+            "Component must include input fields for both email and password.",
+            "Component must include a primary 'Sign In' button.",
+            "must have a 'forgot password' link",
+            "must include a 'Terms of Service' link"
+        ],
+        "feedback_log": []
+    }
+}

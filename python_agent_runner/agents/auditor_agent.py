@@ -1,42 +1,23 @@
 # agents/auditor_agent.py
+import html
 
 class AuditorAgent:
-    """
-    A specialist "Execution" agent that reviews and validates the output
-    of other agents, providing specific feedback for correction.
-    """
     def __init__(self):
-        print("AuditorAgent (v2) initialized.")
+        self.version = "v5.0_Production"
+        print(f"AuditorAgent Initialized - Version: {self.version}")
 
     def review_code(self, html_code: str) -> dict:
-        """
-        Performs a quality check on a string of HTML code.
-        """
-        print("AuditorAgent is reviewing generated code...")
-        
+        # THE FIX: Un-escape HTML entities like '&lt;' back to '<' before analysis.
+        unescaped_code = html.unescape(html_code)
+        clean_code = unescaped_code.replace('<pre>', '').replace('</pre>', '').lower()
+
         feedback = []
-        errors = 0
-
-        if not html_code or not html_code.strip():
-            errors += 1
-            feedback.append("Code is empty.")
-        
-        # Add a more specific check
-        if "</head>" not in html_code.lower():
-            errors += 1
+        if "</head>" not in clean_code:
             feedback.append("Missing closing </head> tag.")
-
-        if "<body>" not in html_code.lower():
-            errors += 1
+        if "<body>" not in clean_code:
             feedback.append("Missing <body> tag.")
-
-        if errors == 0:
-            return {
-                "status": "PASS",
-                "feedback": "All primary checks passed."
-            }
+        
+        if not feedback:
+            return {"status": "PASS", "feedback": "All primary checks passed."}
         else:
-            return {
-                "status": "FAIL",
-                "feedback": " ".join(feedback)
-            }
+            return {"status": "FAIL", "feedback": " ".join(feedback)}

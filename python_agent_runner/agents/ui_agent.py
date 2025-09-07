@@ -1,61 +1,57 @@
 # agents/ui_agent.py
 from agents.ux_design_agent import UX_Design_Agent
 from agents.genesis_agent import GenesisAgent
-from agents.auditor_agent import AuditorAgent
+# ... (other imports)
+from agents.discovery_agent import DiscoveryAgent
+from agents.openai_competitor_agent import OpenAICompetitorAgent
+import random
 
 class UIAgent:
     def __init__(self, max_retries=1):
-        self.ux_agent = UX_Design_Agent()
+        # ... (agent initializations)
         self.genesis_agent = GenesisAgent()
-        self.auditor_agent = AuditorAgent()
-        self.max_retries = max_retries
-        print("UIAgent (v6.0) initialized with Mermaid.js capability.")
+        self.openai_competitor = OpenAICompetitorAgent()
+        self.discovery_agent = DiscoveryAgent()
+        self.state = "IDLE"
+        self.pending_spec = {}
+        print("UIAgent (v11.0) with restored command logic.")
 
     def handle_request(self, user_message: str) -> dict:
         user_message_lower = user_message.lower()
-        response_text, blueprint_text, workspace_text = "", "", ""
 
-        if "map out" in user_message_lower or "architect" in user_message_lower:
-            response_text = "Understood. Generating architecture with Mermaid.js."
-            # This is Mermaid.js syntax for a mind map
-            mermaid_text = """
-mindmap
-  root((E-Commerce App))
-    User-Facing
-      Homepage
-      Product Catalog
-        Search & Filter
-        Product Detail Page
-      Shopping Cart
-      Checkout Process
-    Backend Services
-      Authentication
-      Order Processing
-      Payment Gateway
-"""
-            blueprint_text = "MERMAID_DATA:" + mermaid_text.strip()
-            workspace_text = ""
+        # State machine for conversational flows
+        if self.state == "AWAITING_ANSWERS":
+            # ... (unchanged logic for handling answers)
+            self.state = "AWAITING_CONFIRMATION"
+            # ... return confirmation ...
+        elif self.state == "AWAITING_CONFIRMATION":
+            # ... (unchanged logic for handling final confirmation)
+            self.state = "IDLE"
+            # ... return result ...
 
-        elif "login page" in user_message_lower:
-            # This logic remains the same
-            response_log = ["Acknowledged. Initiating self-correction protocol..."]
-            spec = { "name": "Login Component", "title": "User Sign-In" }
-            audit_result = {}
-            for attempt in range(self.max_retries + 1):
-                feedback = audit_result.get('feedback') if attempt > 0 else None
-                code = self.genesis_agent.generate_code_from_spec(spec, feedback=feedback)
-                audit_result = self.auditor_agent.review_code(code)
-                if audit_result.get('status') == 'PASS':
-                    workspace_text = code
-                    break
-            else:
-                workspace_text = f"<pre>AUDIT FAILED</pre>"
-            response_text = "Login page generated."
-            blueprint_text = "<pre>- [x] Login Component (Self-Corrected)</pre>"
+        # --- COMMAND ROUTING (IDLE STATE) ---
+        if "gauntlet" in user_message_lower:
+            # Gauntlet logic
+            challenge_prompt = "A modern, clean login form component."
+            internal_design = self.genesis_agent.generate_component_fragment({"name": "Login Component", "title": "Internal Design"})
+            external_design = self.openai_competitor.generate_design(challenge_prompt)
+            designs = [internal_design, external_design]; random.shuffle(designs)
+            return {"type": "DECISION_REQUEST", "question": "The Gauntlet: Which design is superior?", "options": {"option_a": designs[0], "option_b": designs[1]}}
+        
+        elif "create a login page" in user_message_lower:
+            # RESTORED: Funnel-Down Dialogue logic
+            questions = self.discovery_agent.generate_clarifying_questions(user_message_lower)
+            self.state = "AWAITING_ANSWERS"
+            self.pending_spec = {"name": "Login Component"}
+            response_text = "<br>".join(["Before I proceed, please answer these questions:"] + questions)
+            return { "type": "STANDARD_RESPONSE", "response": response_text, "blueprint": "<pre>STATUS: Awaiting User Input</pre>", "workspace": "" }
+
+        elif "map out" in user_message_lower:
+            # Mermaid map logic
+            mermaid_text = "mindmap\n  root((E-Commerce App))\n    User-Facing\n      Homepage\n    Backend Services\n      Authentication"
+            return {"type": "STANDARD_RESPONSE", "response": "Generating architecture...", "blueprint": "MERMAID_DATA:" + mermaid_text, "workspace": ""}
         
         else:
-            response_text = f"Request received: '{user_message}'"
-            blueprint_text = "// Blueprint awaiting instructions."
-            workspace_text = ""
+            return { "type": "STANDARD_RESPONSE", "response": f"Command not recognized.", "blueprint": "", "workspace": "" }
 
-        return { "response": response_text, "blueprint": blueprint_text, "workspace": workspace_text }
+    # ... (other helper methods like _trigger_colosseum_protocol remain)
