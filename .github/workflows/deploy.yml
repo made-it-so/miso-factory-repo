@@ -19,12 +19,17 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            # THE FIX: Stop the conflicting host-level NGINX service.
+            # The '|| true' ensures the command doesn't fail if the service is already stopped.
+            sudo systemctl stop nginx || true
+            sudo systemctl disable nginx || true
+
             # Navigate to the project directory
             cd ~/miso-factory-repo
             
-            # THE FIX: Force the server's code to match the repo exactly
+            # Force the server's code to match the repo exactly
             git fetch --all
             git reset --hard origin/main
             
-            # Now, run the application stack
+            # Run the application stack
             sudo /usr/local/bin/docker-compose up --build -d
