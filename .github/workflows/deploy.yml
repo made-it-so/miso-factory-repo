@@ -22,8 +22,9 @@ jobs:
             # Navigate to the project directory
             cd ~/miso-factory-repo
             
-            # Pull the latest changes
-            git pull
+            # THE FIX: Force the server's code to match the repo exactly
+            git fetch --all
+            git reset --hard origin/main
             
-            # Use Docker Compose to build and run the entire application stack
+            # Now, run the application stack
             sudo /usr/local/bin/docker-compose up --build -d
