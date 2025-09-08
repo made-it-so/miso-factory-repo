@@ -1,30 +1,50 @@
-# agents/genesis_agent.py
+# python_agent_runner/agents/genesis_agent.py
+import os
+
 class GenesisAgent:
-    def __init__(self):
-        print("GenesisAgent (v8) with robust fragment generation.")
-
-    def generate_component_fragment(self, spec: dict) -> str:
-        """Generates a clean HTML fragment for a component."""
-        title = spec.get("title", "Component")
-        # This is a simplified, guaranteed-to-work version for the Gauntlet
-        return f"""
-        <div style="background:#2d2d2d; padding:20px; border-radius:5px; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center;">
-            <h3 style="margin-bottom:20px;">{title}</h3>
-            <p style="color:#888;">(MISO Internal Agent)</p>
-            <div style="border:2px solid #4CAF50; padding:10px; margin-top:10px;">
-                <p>Generated a standard login component based on internal knowledge base.</p>
-            </div>
-        </div>
+    def create_website(self, brief):
         """
-    
-    def generate_code_from_spec(self, component_spec: dict, feedback: str = None) -> str:
-        # This logic for the main forge remains the same
-        if feedback and "missing closing </head> tag" in feedback.lower():
-            return self.generate_fixed_login_component(component_spec)
-        return self.generate_buggy_login_component(component_spec)
+        Takes a project brief dictionary and generates a simple HTML file
+        in a web-accessible static directory.
+        """
+        goal = brief.get('goal', 'My Website')
+        content = brief.get('content', 'Welcome to my new site.')
+        vibe = brief.get('vibe', 'A clean and simple style.')
+        action = brief.get('action', 'Click Here')
 
-    def generate_buggy_login_component(self, spec):
-        return f"""<pre>&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;title&gt;{spec['title']}&lt;/title&gt;&lt;body&gt;...&lt;/body&gt;&lt;/html&gt;</pre>"""
+        html_template = f"""
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{goal}</title>
+    <style>
+        body {{ font-family: sans-serif; line-height: 1.6; padding: 20px; max-width: 800px; margin: auto; }}
+        header {{ background: #f4f4f4; padding: 1rem; text-align: center; }}
+        section {{ padding: 1rem; border-bottom: 1px solid #ddd; }}
+        footer {{ text-align: center; padding: 1rem; margin-top: 20px; background: #333; color: #fff; }}
+        .cta-button {{ background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; }}
+    </style>
+</head>
+<body>
+    <header><h1>{goal}</h1><p>Style notes: {vibe}</p></header>
+    <section id="main-content"><h2>Main Content</h2><p>{content}</p></section>
+    <footer><a href="#" class="cta-button">{action}</a></footer>
+</body>
+</html>
+"""
+        # Define a web-accessible output path
+        output_dir = 'python_agent_runner/blueprints/ui/static/output'
+        output_filename = 'output.html'
+        output_path = os.path.join(output_dir, output_filename)
+        
+        # The URL the browser will use to access the file
+        preview_url = f'/ui/static/output/{output_filename}'
 
-    def generate_fixed_login_component(self, spec):
-        return f"""<pre>&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;title&gt;{spec['title']}&lt;/title&gt;&lt;/head&gt;&lt;body&gt;...&lt;/body&gt;&lt;/html&gt;</pre>"""
+        try:
+            os.makedirs(output_dir, exist_ok=True) # Ensure the output directory exists
+            with open(output_path, 'w') as f:
+                f.write(html_template)
+            return {"status": "Success", "preview_url": preview_url}
+        except Exception as e:
+            return {"status": f"Error: {e}", "preview_url": None}

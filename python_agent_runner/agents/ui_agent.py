@@ -1,57 +1,51 @@
-# agents/ui_agent.py
-from agents.ux_design_agent import UX_Design_Agent
-from agents.genesis_agent import GenesisAgent
-# ... (other imports)
-from agents.discovery_agent import DiscoveryAgent
-from agents.openai_competitor_agent import OpenAICompetitorAgent
-import random
+# python_agent_runner/agents/ui_agent.py
+from .genesis_agent import GenesisAgent
 
 class UIAgent:
-    def __init__(self, max_retries=1):
-        # ... (agent initializations)
+    def __init__(self):
+        self.creation_sessions = {}
         self.genesis_agent = GenesisAgent()
-        self.openai_competitor = OpenAICompetitorAgent()
-        self.discovery_agent = DiscoveryAgent()
-        self.state = "IDLE"
-        self.pending_spec = {}
-        print("UIAgent (v11.0) with restored command logic.")
 
-    def handle_request(self, user_message: str) -> dict:
-        user_message_lower = user_message.lower()
+    def process_request(self, user_input):
+        session_id = 'default_user'
+        if session_id in self.creation_sessions:
+            session = self.creation_sessions[session_id]
+            current_state = session['state']
 
-        # State machine for conversational flows
-        if self.state == "AWAITING_ANSWERS":
-            # ... (unchanged logic for handling answers)
-            self.state = "AWAITING_CONFIRMATION"
-            # ... return confirmation ...
-        elif self.state == "AWAITING_CONFIRMATION":
-            # ... (unchanged logic for handling final confirmation)
-            self.state = "IDLE"
-            # ... return result ...
+            if current_state == 'awaiting_goal':
+                session['brief']['goal'] = user_input
+                session['state'] = 'awaiting_content'
+                return {'response': 'Perfect. Now, what key sections or information should we include on the page?'}
+            
+            elif current_state == 'awaiting_content':
+                session['brief']['content'] = user_input
+                session['state'] = 'awaiting_vibe'
+                return {'response': 'Great, we have the sections mapped out. Now, what kind of vibe are you going for?'}
 
-        # --- COMMAND ROUTING (IDLE STATE) ---
-        if "gauntlet" in user_message_lower:
-            # Gauntlet logic
-            challenge_prompt = "A modern, clean login form component."
-            internal_design = self.genesis_agent.generate_component_fragment({"name": "Login Component", "title": "Internal Design"})
-            external_design = self.openai_competitor.generate_design(challenge_prompt)
-            designs = [internal_design, external_design]; random.shuffle(designs)
-            return {"type": "DECISION_REQUEST", "question": "The Gauntlet: Which design is superior?", "options": {"option_a": designs[0], "option_b": designs[1]}}
+            elif current_state == 'awaiting_vibe':
+                session['brief']['vibe'] = user_input
+                session['state'] = 'awaiting_action'
+                return {'response': 'Excellent choice. Finally, what is the single most important action you want a visitor to take?'}
+            
+            elif current_state == 'awaiting_action':
+                session['brief']['action'] = user_input
+                final_brief = session['brief']
+                
+                creation_result = self.genesis_agent.create_website(final_brief)
+                
+                if creation_result['status'] == 'Success':
+                    response_text = 'Fantastic! The project brief is complete. I have generated a preview of your website in the Visualizer panel.'
+                    preview_url = creation_result['preview_url']
+                else:
+                    response_text = f'There was an error during creation: {creation_result["status"]}'
+                    preview_url = None
+                
+                del self.creation_sessions[session_id]
+                return {'response': response_text, 'preview_url': preview_url}
+
+        elif 'make a website' in user_input.lower():
+            self.creation_sessions[session_id] = { 'state': 'awaiting_goal', 'brief': {} }
+            return {'response': 'I can help with that! To start, what is the primary goal of the site?'}
         
-        elif "create a login page" in user_message_lower:
-            # RESTORED: Funnel-Down Dialogue logic
-            questions = self.discovery_agent.generate_clarifying_questions(user_message_lower)
-            self.state = "AWAITING_ANSWERS"
-            self.pending_spec = {"name": "Login Component"}
-            response_text = "<br>".join(["Before I proceed, please answer these questions:"] + questions)
-            return { "type": "STANDARD_RESPONSE", "response": response_text, "blueprint": "<pre>STATUS: Awaiting User Input</pre>", "workspace": "" }
+        return {'response': 'I am ready to assist. You can ask me to "make a website" to begin the creation process.'}
 
-        elif "map out" in user_message_lower:
-            # Mermaid map logic
-            mermaid_text = "mindmap\n  root((E-Commerce App))\n    User-Facing\n      Homepage\n    Backend Services\n      Authentication"
-            return {"type": "STANDARD_RESPONSE", "response": "Generating architecture...", "blueprint": "MERMAID_DATA:" + mermaid_text, "workspace": ""}
-        
-        else:
-            return { "type": "STANDARD_RESPONSE", "response": f"Command not recognized.", "blueprint": "", "workspace": "" }
-
-    # ... (other helper methods like _trigger_colosseum_protocol remain)
