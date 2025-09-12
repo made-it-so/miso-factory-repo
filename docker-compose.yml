@@ -5,7 +5,7 @@ services:
       dockerfile: python_agent_runner/Dockerfile
     container_name: miso_app_container
     ports:
-      - ""8000:8000""
+      - '8000:8000'
     volumes:
       - ./python_agent_runner:/app
       - ./research_subjects:/app/research_subjects
@@ -14,19 +14,16 @@ services:
       - FLASK_ENV=development
     networks:
       - miso_network
-
   nginx:
     build:
-      context: .
-      dockerfile: nginx/Dockerfile
+      context: ./nginx
     container_name: nginx_proxy
     ports:
-      - ""8088:80""
+      - '8088:80'
     networks:
       - miso_network
     depends_on:
       - miso_app
-
 networks:
   miso_network:
     driver: bridge
