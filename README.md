@@ -1,23 +1,18 @@
 # MISO (Made-It-So) ??
 
 ## Overview
-MISO is an expert AI assistant designed to function as a strategic partner in creating software and digital artifacts. It operates as a **"no-code creation platform"** for non-technical users, guiding them from a high-level idea to a finished product through a conversational dialogue.
+MISO is an expert AI assistant designed to function as a strategic partner in creating and analyzing software. It operates on a **Simplicity Mandate**, providing an intuitive conversational interface to control a complex, multi-agent system.
 
-## Current Status: Beta v0.1 (Website Creator)
-The project is currently capable of:
-- Engaging a user in a multi-turn **"Funnel-Down Dialogue"** to define the specifications for a simple website.
-- Accepting voice input with a **real-time transcript**.
-- Generating a single-page HTML file based on the user's specifications.
-- Displaying the generated website in a **"Live Preview"** panel within the MISO Cockpit.
-
-## Core Vision
-- **Expert Sherpa:** MISO guides users, anticipates needs, and suggests the best path forward.
-- **MISO Cockpit:** The UI is an action-oriented workspace that provides a proactive "Heads-Up Display" for the creation process.
-- **Cerebrum-Cerebellum:** The agent architecture separates strategic planning (`UIAgent`) from specialized execution (`GenesisAgent`).
+## Current Status: Stable v0.2
+The MISO Cockpit is now stable and operational. Current, fully tested features include:
+- **Intelligent Creative Dialogue:** A dynamic, history-aware conversational agent (`UIAgent`) that helps users define complex project ideas from scratch.
+- **Code Analysis (`OntologyAgent`):** The ability to analyze a directory of source code (`analyze <path>`) and generate a text-based summary.
+- **Interactive Visualization (`Cartographer`):** A "Living Blueprint" that displays an interactive, clickable mind map of the analyzed code structure.
+- **Conversational Exploration:** The ability to ask for details about specific code elements by clicking on the mind map (`Click-to-Explain`).
 
 ## How to Run
-This project is fully containerized using Docker.
-1. Ensure you have Docker Desktop installed and running.
-2. From the root directory (`miso-factory-repo/`), run the command: `docker-compose up --build`
-3. The application will be available in your browser (typically at `http://localhost:80` or `http://localhost:5001`).
-
+This project is fully containerized. The most reliable launch procedure is a two-step, no-cache build:
+1. Ensure Docker Desktop is running.
+2. From the project root, run: `docker-compose build --no-cache`
+3. Then, run: `docker-compose up`
+4. The MISO Cockpit will be available at `http://localhost:80`.

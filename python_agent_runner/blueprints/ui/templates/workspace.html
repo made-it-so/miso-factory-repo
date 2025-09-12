@@ -10,7 +10,8 @@
         <div id="chat-panel">
             <div id="chat-log"></div>
             <div id="input-area">
-                <div id="transcript-preview"></div> <textarea id="user-input" placeholder="Type or use the microphone..."></textarea>
+                <div id="transcript-preview"></div>
+                <textarea id="user-input" placeholder="Type or use the microphone..."></textarea>
                 <div id="button-bar">
                     <button id="send-btn">Send</button>
                     <button id="voice-btn">??</button>
@@ -23,6 +24,19 @@
                 </div>
         </div>
     </div>
+
+    <button id="feedback-floater">Feedback</button>
+    <div id="feedback-modal" class="hidden">
+        <div class="modal-content">
+            <span id="close-modal">&times;</span>
+            <h2>Provide Beta Feedback</h2>
+            <p>Your feedback is valuable. Please describe your experience or suggest an improvement.</p>
+            <textarea id="feedback-input" placeholder="My experience was..."></textarea>
+            <button id="submit-feedback-btn">Submit Feedback</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="{{ url_for('ui.static', filename='script.js') }}"></script>
 </body>
 </html>
