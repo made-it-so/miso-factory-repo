@@ -1,8 +1,10 @@
+# Defines the services that make up the MISO application stack.
 services:
+  # The core MISO application service.
   miso_app:
     build:
       context: .
-      dockerfile: python_agent_runner/Dockerfile
+      dockerfile: ./python_agent_runner/Dockerfile
     container_name: miso_app_container
     ports:
       - '8000:8000'
@@ -14,6 +16,8 @@ services:
       - FLASK_ENV=development
     networks:
       - miso_network
+
+  # The Nginx reverse proxy service.
   nginx:
     build:
       context: ./nginx
@@ -24,6 +28,8 @@ services:
       - miso_network
     depends_on:
       - miso_app
+
+# Defines the network for communication between services.
 networks:
   miso_network:
     driver: bridge
