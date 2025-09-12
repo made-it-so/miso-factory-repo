@@ -1,15 +1,7 @@
-# Git
-.git
-.gitignore
+# Ignore Git and environment files
+.git/
+.venv/
+__pycache__/
 
-# Python virtual environment
-venv
-.venv
-
-# Python cache
-__pycache__
-*.pyc
-
-# IDE files
-.vscode
-.idea
+# CRITICAL: Ignore large model data
+/ollama_data/
