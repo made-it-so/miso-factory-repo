@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   miso_app:
     build:
@@ -7,7 +5,7 @@ services:
       dockerfile: python_agent_runner/Dockerfile
     container_name: miso_app_container
     ports:
-      - 8000:8000
+      - ""8000:8000""
     volumes:
       - ./python_agent_runner:/app
       - ./research_subjects:/app/research_subjects
@@ -23,7 +21,7 @@ services:
       dockerfile: nginx/Dockerfile
     container_name: nginx_proxy
     ports:
-      - 8088:80
+      - ""8088:80""
     networks:
       - miso_network
     depends_on:
