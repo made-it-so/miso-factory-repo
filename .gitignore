@@ -27,3 +27,5 @@ forge-stack.yml
 /certbot/
 /nginx/
 /ollama/
+
+directory_map.txt
