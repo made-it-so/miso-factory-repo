@@ -1,18 +1,34 @@
+version: '3.8'
+
 services:
-  app:
+  miso_app:
     build:
-      context: ./python_agent_runner
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: python_agent_runner/Dockerfile
     container_name: miso_app_container
+    ports:
+      - ""8000:8000""
+    volumes:
+      - ./python_agent_runner:/app
+      - ./research_subjects:/app/research_subjects
+      - ./generated_projects:/app/generated_projects
     environment:
-      - OLLAMA_HOST=host.docker.internal
+      - FLASK_ENV=development
+    networks:
+      - miso_network
 
   nginx:
     build:
-      context: .
-      dockerfile: ./nginx/Dockerfile
-    container_name: miso_nginx_container
+      context: .  # Corrected: Build context is the project root
+      dockerfile: nginx/Dockerfile # Specify the Dockerfile location
+    container_name: nginx_proxy
     ports:
-      - "80:80"
+      - ""8088:80""
+    networks:
+      - miso_network
     depends_on:
-      - app
+      - miso_app
+
+networks:
+  miso_network:
+    driver: bridge
