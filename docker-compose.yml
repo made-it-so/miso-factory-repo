@@ -7,7 +7,7 @@ services:
       dockerfile: python_agent_runner/Dockerfile
     container_name: miso_app_container
     ports:
-      - ""8000:8000""
+      - 8000:8000
     volumes:
       - ./python_agent_runner:/app
       - ./research_subjects:/app/research_subjects
@@ -19,11 +19,11 @@ services:
 
   nginx:
     build:
-      context: .  # Corrected: Build context is the project root
-      dockerfile: nginx/Dockerfile # Specify the Dockerfile location
+      context: .
+      dockerfile: nginx/Dockerfile
     container_name: nginx_proxy
     ports:
-      - ""8088:80""
+      - 8088:80
     networks:
       - miso_network
     depends_on:
