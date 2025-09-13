@@ -2,23 +2,27 @@
 .git
 .github
 
-# IDE and OS files
-.vscode
-.idea
-*.swp
-*~
-.DS_Store
+# Python virtual environment
+.venv/
+venv/
 
 # Python cache
 __pycache__/
 *.pyc
+*.pyo
+
+# IDE and OS files
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+
+# MISO specific outputs and tests
+generated_projects/
+local_test.py
+sqs_receiver_test.py
+*.log
 
 # Environment files
-*.env
-
-# CRITICAL: Ignore the large model data located inside the runner directory
-python_agent_runner/ollama_data/
-
-# Other unnecessary build artifacts and logs
-node_modules/
-*.log
+.env
