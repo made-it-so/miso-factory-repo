@@ -10,20 +10,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Deploy to Server
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            # THE FIX: Stop the conflicting host-level NGINX service.
-            # The '|| true' ensures the command doesn't fail if the service is already stopped.
-            sudo systemctl stop nginx || true
-            sudo systemctl disable nginx || true
-
             # Navigate to the project directory
             cd ~/miso-factory-repo
             
@@ -31,5 +26,15 @@ jobs:
             git fetch --all
             git reset --hard origin/main
             
+            # THE FIX: Ensure large model data is removed before the build
+            # This prevents the "no space left on device" error on your server.
+            echo "Removing large model data to prevent build failure..."
+            rm -rf python_agent_runner/ollama_data
+
+            # Stop any conflicting host-level services
+            sudo systemctl stop nginx || true
+            sudo systemctl disable nginx || true
+            
             # Run the application stack
+            echo "Starting Docker Compose build..."
             sudo /usr/local/bin/docker-compose up --build -d
