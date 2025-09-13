@@ -1,35 +1,27 @@
-# Defines the services that make up the MISO application stack.
-services:
-  # The core MISO application service.
-  miso_app:
-    build:
-      context: .
-      dockerfile: ./python_agent_runner/Dockerfile
-    container_name: miso_app_container
-    ports:
-      - '8000:8000'
-    volumes:
-      - ./python_agent_runner:/app
-      - ./research_subjects:/app/research_subjects
-      - ./generated_projects:/app/generated_projects
-    environment:
-      - FLASK_ENV=development
-    networks:
-      - miso_network
+version: '3.8'
 
-  # The Nginx reverse proxy service.
+services:
+  # The Python/Flask application service
+  miso_app:
+    # THIS IS THE CORRECTED BUILD CONFIGURATION
+    # It tells Docker to look inside the python_agent_runner folder for the files.
+    build:
+      context: ./python_agent_runner
+      dockerfile: Dockerfile
+    # This exposes the application's port for Nginx to connect to.
+    # It does NOT make it accessible from the outside world.
+    expose:
+      - "5000"
+
+  # The Nginx reverse proxy service
   nginx:
     build:
       context: ./nginx
-    container_name: nginx_proxy
+      dockerfile: Dockerfile
     ports:
-      - '8088:80'
-    networks:
-      - miso_network
+      # This maps port 80 from your server to port 80 in the Nginx container,
+      # making your application accessible via the server's IP address.
+      - "80:80"
+    # This ensures that Nginx will only start after the miso_app is running.
     depends_on:
       - miso_app
-
-# Defines the network for communication between services.
-networks:
-  miso_network:
-    driver: bridge
