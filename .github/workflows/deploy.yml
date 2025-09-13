@@ -21,20 +21,23 @@ jobs:
           script: |
             # Navigate to the project directory
             cd ~/miso-factory-repo
-            
+
+            # Clean up Docker to free disk space from previous failed builds
+            echo "Pruning Docker system to free up disk space..."
+            sudo docker system prune -af
+
             # Force the server's code to match the repo exactly
             git fetch --all
             git reset --hard origin/main
-            
-            # THE FIX: Ensure large model data is removed before the build
-            # This prevents the "no space left on device" error on your server.
+
+            # Ensure large model data is removed before the build
             echo "Removing large model data to prevent build failure..."
             rm -rf python_agent_runner/ollama_data
 
             # Stop any conflicting host-level services
             sudo systemctl stop nginx || true
             sudo systemctl disable nginx || true
-            
+
             # Run the application stack
             echo "Starting Docker Compose build..."
             sudo /usr/local/bin/docker-compose up --build -d
