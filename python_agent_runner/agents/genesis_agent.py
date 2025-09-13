@@ -1,26 +1,52 @@
 import logging
 import ollama
+import os
+import json
 from .planning_agent import PlanningAgent
 from .simulation_agent import SimulationAgent
+from .code_generation_agent import CodeGenerationAgent
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 class GenesisAgent:
-    """
-    Orchestrates the Plan -> Simulate -> Generate pipeline.
-    """
-    def __init__(self):
+    """Orchestrates the Plan -> Simulate -> Generate pipeline."""
+    def __init__(self, output_dir="generated_projects"):
         self.logger = logging.getLogger(self.__class__.__name__)
         self.planning_agent = PlanningAgent()
         self.simulation_agent = SimulationAgent()
-        self.logger.info("GenesisAgent initialized with Planning and Simulation sub-agents.")
+        self.code_generation_agent = CodeGenerationAgent()
+        self.output_dir = output_dir
+        os.makedirs(self.output_dir, exist_ok=True)
+        self.logger.info("GenesisAgent initialized with all sub-agents.")
+
+    def _create_project_files(self, project_name: str, file_structure: dict) -> bool:
+        """Recursively creates the project files and directories."""
+        project_root = os.path.join(self.output_dir, project_name)
+        
+        # Helper function to recursively process the file structure
+        def process_level(current_path, structure):
+            os.makedirs(current_path, exist_ok=True)
+            for name, content in structure.items():
+                full_path = os.path.join(current_path, name)
+                if isinstance(content, dict): # It's a directory
+                    if not process_level(full_path, content):
+                        return False
+                elif isinstance(content, str): # It's a file
+                    generated_code = self.code_generation_agent.generate_code(full_path, content)
+                    if generated_code is None:
+                        self.logger.error(f"Halting due to failure in generating {full_path}")
+                        return False # Halt-on-error
+                    with open(full_path, 'w', encoding='utf-8') as f:
+                        f.write(generated_code)
+                    self.logger.info(f"Successfully wrote file: {full_path}")
+            return True
+
+        return process_level(project_root, file_structure)
 
     def create_codebase(self, proposal: dict):
-        """
-        The main entry point to create a new codebase from a proposal.
-        """
+        """The main entry point to create a new codebase from a proposal."""
         objective = proposal.get("objective", "No objective provided.")
-        project_name = proposal.get('project_name', 'Untitled')
+        project_name = proposal.get('project_name', 'untitled_project').replace(' ', '_').lower()
         self.logger.info(f"--- Starting New Project: {project_name} ---")
 
         # 1. PLAN
@@ -36,16 +62,20 @@ class GenesisAgent:
         status = simulation_report.get("status", "FAIL").upper()
         
         self.logger.info(f"Simulation complete. Status: {status}")
-        if status in ["FAIL", "WARNING"]:
-            self.logger.error("Simulation failed or returned warnings. Halting execution.")
-            self.logger.error(f"Report: {simulation_report}")
-            return {"status": "FAIL", "reason": "Simulation phase failed or has warnings.", "report": simulation_report}
+        if status != "PASS":
+            self.logger.error(f"Simulation did not pass ({status}). Halting execution.")
+            return {"status": "FAIL", "reason": f"Simulation status was {status}.", "report": simulation_report}
 
-        # 3. GENERATE (Placeholder for now)
+        # 3. GENERATE
         self.logger.info("Phase 3: Code Generation...")
-        # The actual code generation logic would be implemented here,
-        # using the detailed 'plan' to guide one or more CodeGenerationAgents.
-        self.logger.info("Code generation would proceed here based on the validated plan.")
+        file_structure = plan.get("file_structure")
+        if not file_structure:
+            self.logger.error("Plan is missing 'file_structure'. Cannot generate code.")
+            return {"status": "FAIL", "reason": "Plan is invalid."}
+
+        success = self._create_project_files(project_name, file_structure)
+        if not success:
+            return {"status": "FAIL", "reason": "Code generation failed for one or more files."}
         
-        self.logger.info("--- Project Pipeline Completed Successfully ---")
-        return {"status": "SUCCESS", "reason": "Plan created and validated successfully.", "plan": plan}
+        self.logger.info(f"--- Project Pipeline Completed Successfully. Output at: {os.path.join(self.output_dir, project_name)} ---")
+        return {"status": "SUCCESS", "reason": "Codebase generated successfully.", "output_path": os.path.join(self.output_dir, project_name)}
