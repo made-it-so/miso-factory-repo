@@ -1,7 +1,24 @@
-# Ignore Git and environment files
-.git/
-.venv/
-__pycache__/
+# Git and GitHub
+.git
+.github
 
-# CRITICAL: Ignore large model data
-/ollama_data/
+# IDE and OS files
+.vscode
+.idea
+*.swp
+*~
+.DS_Store
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Environment files
+*.env
+
+# CRITICAL: Ignore the large model data located inside the runner directory
+python_agent_runner/ollama_data/
+
+# Other unnecessary build artifacts and logs
+node_modules/
+*.log
