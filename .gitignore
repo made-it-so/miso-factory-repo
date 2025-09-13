@@ -29,3 +29,6 @@ forge-stack.yml
 /ollama/
 
 directory_map.txt
+
+# Ignore local Ollama models
+/python_agent_runner/ollama_data/
