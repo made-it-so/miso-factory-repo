@@ -1,30 +1,51 @@
-# python_agent_runner/agents/genesis_agent.py
-import os
+import logging
 import ollama
-from .gauntlet_agent import GauntletAgent # Import the new agent
+from .planning_agent import PlanningAgent
+from .simulation_agent import SimulationAgent
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 class GenesisAgent:
+    """
+    Orchestrates the Plan -> Simulate -> Generate pipeline.
+    """
     def __init__(self):
-        self.gauntlet_agent = GauntletAgent() # Create an instance of the GauntletAgent
+        self.logger = logging.getLogger(self.__class__.__name__)
+        self.planning_agent = PlanningAgent()
+        self.simulation_agent = SimulationAgent()
+        self.logger.info("GenesisAgent initialized with Planning and Simulation sub-agents.")
 
-    def create_website(self, brief):
-        # Step 1: Create the first draft of the prompt
-        draft_prompt = f"Create a complete, single-file HTML website based on this brief: {brief}"
-        domain = brief.get('domain', 'general web design') # Get the domain from the brief
+    def create_codebase(self, proposal: dict):
+        """
+        The main entry point to create a new codebase from a proposal.
+        """
+        objective = proposal.get("objective", "No objective provided.")
+        project_name = proposal.get('project_name', 'Untitled')
+        self.logger.info(f"--- Starting New Project: {project_name} ---")
 
-        # Step 2: Send the draft prompt to the Gauntlet for refinement
-        refined_prompt = self.gauntlet_agent.refine_prompt(draft_prompt, domain)
+        # 1. PLAN
+        self.logger.info("Phase 1: Planning...")
+        plan = self.planning_agent.create_plan(objective)
+        if "error" in plan:
+            self.logger.error(f"Planning failed: {plan.get('details')}")
+            return {"status": "FAIL", "reason": "Planning phase failed.", "details": plan.get('details')}
 
-        # Step 3: Use the refined prompt to generate the final product
-        try:
-            print("GenesisAgent: Sending refined prompt to LLM...")
-            response = ollama.chat(
-                model='llama3',
-                messages=[{'role': 'user', 'content': refined_prompt}],
-            )
-            html_code = response['message']['content']
-            # ... (rest of the file saving logic remains the same)
-            
-            return {"status": "Success", "preview_url": "/static/output/output.html"}
-        except Exception as e:
-            return {"status": f"Error: {e}", "preview_url": None}
+        # 2. SIMULATE
+        self.logger.info("Phase 2: Simulation...")
+        simulation_report = self.simulation_agent.run_simulation(plan)
+        status = simulation_report.get("status", "FAIL").upper()
+        
+        self.logger.info(f"Simulation complete. Status: {status}")
+        if status in ["FAIL", "WARNING"]:
+            self.logger.error("Simulation failed or returned warnings. Halting execution.")
+            self.logger.error(f"Report: {simulation_report}")
+            return {"status": "FAIL", "reason": "Simulation phase failed or has warnings.", "report": simulation_report}
+
+        # 3. GENERATE (Placeholder for now)
+        self.logger.info("Phase 3: Code Generation...")
+        # The actual code generation logic would be implemented here,
+        # using the detailed 'plan' to guide one or more CodeGenerationAgents.
+        self.logger.info("Code generation would proceed here based on the validated plan.")
+        
+        self.logger.info("--- Project Pipeline Completed Successfully ---")
+        return {"status": "SUCCESS", "reason": "Plan created and validated successfully.", "plan": plan}
