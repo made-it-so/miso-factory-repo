@@ -1,0 +1,56 @@
+[
+  {
+    "id": "http://arxiv.org/abs/2509.09614v1",
+    "title": "LoCoBench: A Benchmark for Long-Context Large Language Models in Complex Software Engineering",
+    "summary": "The emergence of long-context language models with context windows extending to millions of tokens has created new opportunities for sophisticated code understanding and software development evaluation. We propose LoCoBench, a comprehensive benchmark specifically designed to evaluate long-context LLMs in realistic, complex software development scenarios. Unlike existing code evaluation benchmarks that focus on single-function completion or short-context tasks, LoCoBench addresses the critical evaluation gap for long-context capabilities that require understanding entire codebases, reasoning across multiple files, and maintaining architectural consistency across large-scale software systems. Our benchmark provides 8,000 evaluation scenarios systematically generated across 10 programming languages, with context lengths spanning 10K to 1M tokens, a 100x variation that enables precise assessment of long-context performance degradation in realistic software development settings. LoCoBench introduces 8 task categories that capture essential long-context capabilities: architectural understanding, cross-file refactoring, multi-session development, bug investigation, feature implementation, code comprehension, integration testing, and security analysis. Through a 5-phase pipeline, we create diverse, high-quality scenarios that challenge LLMs to reason about complex codebases at unprecedented scale. We introduce a comprehensive evaluation framework with 17 metrics across 4 dimensions, including 8 new evaluation metrics, combined in a LoCoBench Score (LCBS). Our evaluation of state-of-the-art long-context models reveals substantial performance gaps, demonstrating that long-context understanding in complex software development represents a significant unsolved challenge that demands more attention. LoCoBench is released at: https://github.com/SalesforceAIResearch/LoCoBench.",
+    "authors": [
+      "Jielin Qiu",
+      "Zuxin Liu",
+      "Zhiwei Liu",
+      "Rithesh Murthy",
+      "Jianguo Zhang",
+      "Haolin Chen",
+      "Shiyu Wang",
+      "Ming Zhu",
+      "Liangwei Yang",
+      "Juntao Tan",
+      "Zhepeng Cen",
+      "Cheng Qian",
+      "Shelby Heinecke",
+      "Weiran Yao",
+      "Silvio Savarese",
+      "Caiming Xiong",
+      "Huan Wang"
+    ],
+    "published_date": "2025-09-11T16:55:04+00:00",
+    "pdf_url": "http://arxiv.org/pdf/2509.09614v1",
+    "relevance_score": 8.0,
+    "relevance_justification": "The paper's focus on evaluating long-context language models in complex software engineering scenarios is highly relevant to MISO's objectives in autonomous code generation, AI planning, and reasoning, as it could inform the development of more advanced AI planning and reasoning capabilities.",
+    "novelty_score": 8.0,
+    "novelty_justification": "The LoCoBench framework's ability to create diverse, high-quality scenarios for evaluating long-context capabilities can be metaphorically applied to MISO by generating varied and challenging planning scenarios for autonomous code generation, allowing AI planners to demonstrate their capacity to reason about complex software development settings.",
+    "final_score": 8.0
+  },
+  {
+    "id": "http://arxiv.org/abs/2509.09560v1",
+    "title": "Boosting Embodied AI Agents through Perception-Generation Disaggregation and Asynchronous Pipeline Execution",
+    "summary": "Embodied AI systems operate in dynamic environments, requiring seamless integration of perception and generation modules to process high-frequency input and output demands. Traditional sequential computation patterns, while effective in ensuring accuracy, face significant limitations in achieving the necessary \"thinking\" frequency for real-world applications. In this work, we present Auras, an algorithm-system co-designed inference framework to optimize the inference frequency of embodied AI agents. Auras disaggregates the perception and generation and provides controlled pipeline parallelism for them to achieve high and stable throughput. Faced with the data staleness problem that appears when the parallelism is increased, Auras establishes a public context for perception and generation to share, thereby promising the accuracy of embodied agents. Experimental results show that Auras improves throughput by 2.54x on average while achieving 102.7% of the original accuracy, demonstrating its efficacy in overcoming the constraints of sequential computation and providing high throughput.",
+    "authors": [
+      "Shulai Zhang",
+      "Ao Xu",
+      "Quan Chen",
+      "Han Zhao",
+      "Weihao Cui",
+      "Ningxin Zheng",
+      "Haibin Lin",
+      "Xin Liu",
+      "Minyi Guo"
+    ],
+    "published_date": "2025-09-11T15:51:43+00:00",
+    "pdf_url": "http://arxiv.org/pdf/2509.09560v1",
+    "relevance_score": 8.0,
+    "relevance_justification": "The paper's focus on optimizing inference frequency for embodied AI agents through perception-generation disaggregation and asynchronous pipeline execution aligns with MISO's objectives in autonomous code generation, AI planning, reasoning, and simulation, particularly in the context of human-AI interaction and collaboration.",
+    "novelty_score": 8.0,
+    "novelty_justification": "The idea of 'disaggregating' and 'controlling pipeline parallelism' for improved throughput can be metaphorically applied to MISO's goal of self-improvement architectures, where the perception (knowledge acquisition) and generation (new skill development) modules need to be optimized and coordinated in an asynchronous manner to achieve higher thinking frequencies.",
+    "final_score": 8.0
+  }
+]

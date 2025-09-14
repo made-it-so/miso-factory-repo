@@ -1,0 +1,51 @@
+{
+  "key_findings": {
+    "Architecture Understanding": [
+      "Models like Gemini-2.5-Pro and gpt5mini outperform others in understanding software architecture."
+    ],
+    "Cross-File Refactoring": [
+      "GPT-4.1-mini shows a slight edge over other models in refactoring code across multiple files."
+    ],
+    "Multi-Session Development": [
+      "GPT-5 demonstrates strong performance in this task, indicating its ability to adapt to changing requirements and tasks."
+    ],
+    "Bug Investigation": [
+      "Gemini-2.5-Pro stands out as the best performer in identifying bugs and debugging software issues."
+    ],
+    "Feature Implementation": [
+      "Models like gpt5mini and GPT-5 show high scores in implementing new features into existing software systems."
+    ],
+    "Code Comprehension": [
+      "Gemini-2.5-Pro excels at understanding code semantics, making it a strong candidate for tasks that require deep comprehension of code structure."
+    ],
+    "Integration Testing": [
+      "GPT-4.1-2025-04-14 shows a slight edge over other models in integrating new features with existing software systems."
+    ],
+    "Security Analysis": [
+      "Gemini-2.5-Pro demonstrates high scores in identifying security vulnerabilities and analyzing potential threats."
+    ]
+  },
+  "techniques": {
+    "Total Scores": "A composite score is calculated for each model, aggregating its performance across various programming tasks.",
+    "Long-Context Scores": "Models are evaluated on their ability to understand code context and make informed decisions when working with large codebases."
+  },
+  "potential_applications": {
+    "Software Development Assistance": [
+      "AI models can assist software developers in tasks such as refactoring, debugging, and implementing new features."
+    ],
+    "Code Review": [
+      "AI-powered tools can help review code for bugs, security vulnerabilities, and maintainability issues."
+    ],
+    "Automated Testing": [
+      "AI models can be trained to perform integration testing and identify potential issues before they impact the software."
+    ]
+  },
+  "tables": {
+    "Table 15": "Long-Context Scores by Architecture Pattern",
+    "Table 16": "Detailed comparison of model performance by theme.",
+    "(a) Total Scores by Theme: A table comparing different models' total scores across various themes.": "",
+    "(b) Success Rates by Theme (%): Another table showing the success rates of each model for each theme.": "",
+    "Section (Unknown)": "A table with various model performance scores by theme (e.g., Model, Algorithms, Data Structures, System Design, Security, Performance, Testing, Maintenance, Integration)."
+  },
+  "paper_title": "LoCoBench: A Benchmark for Long-Context Large Language Models in Complex Software Engineering"
+}

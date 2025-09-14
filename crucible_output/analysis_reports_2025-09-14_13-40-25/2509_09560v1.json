@@ -1,0 +1,42 @@
+{
+  "analysisReport": {
+    "title": "Boosting Embodied AI Agents through Perception-Generation Disaggregation and Asynchronous Pipeline Execution",
+    "keyFindings": [
+      {
+        "finding": "Traditional sequential computation patterns in embodied AI systems face limitations in achieving high throughput.",
+        "technique": null,
+        "potentialApplication": "Large language models for robotic manipulation and control"
+      },
+      {
+        "finding": "Auras improves throughput by 2.54\u00d7 on average while achieving 102.7% of the original accuracy.",
+        "technique": "Disaggregating perception and generation",
+        "potentialApplication": "Robotics, artificial intelligence"
+      }
+    ],
+    "techniques": [
+      {
+        "technique": "Pipeline Tuning",
+        "potentialApplication": "Efficient inference of large language models"
+      },
+      {
+        "technique": "Scaling the Model",
+        "potentialApplication": "Advancements in embodied cognition, where AI systems can reason about physical environments"
+      }
+    ],
+    "potentialApplications": [
+      {
+        "application": "Robotics: Improved robotic manipulation capabilities through the use of LLMs.",
+        "relatedTechniques": [
+          "Disaggregating perception and generation"
+        ]
+      },
+      {
+        "application": "Computer Vision: Enhanced image recognition and segmentation tasks using diffusion transformers.",
+        "relatedTechniques": [
+          "Pipelined data-parallel CPU/GPU scheduling for multi-DNN real-time inference"
+        ]
+      }
+    ]
+  },
+  "paper_title": "Boosting Embodied AI Agents through Perception-Generation Disaggregation and Asynchronous Pipeline Execution"
+}

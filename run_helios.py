@@ -24,10 +24,13 @@ def run_pipeline():
     with open(scan_filename, 'w', encoding='utf-8') as f: json.dump(papers, f, indent=2)
     print(f"? Scan complete. Full results saved to: {scan_filename}")
 
+    # Limit the scope for faster testing
+    papers_to_triage = papers[:5]
+    
     # Phase 2: Triage
-    print("\n--- [Helios Protocol: Phase 2 - Triage] ---")
+    print(f"\n--- [Helios Protocol: Phase 2 - Triage (Top {len(papers_to_triage)} Papers)] ---")
     triage_agent = TriageAgent()
-    triaged_papers = triage_agent.run_triage(papers)
+    triaged_papers = triage_agent.run_triage(papers_to_triage)
 
     if not triaged_papers:
         print("?? Triage complete. No papers met the relevance threshold.")

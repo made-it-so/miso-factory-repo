@@ -1,0 +1,216 @@
+[
+  {
+    "id": "http://arxiv.org/abs/2509.09674v1",
+    "title": "SimpleVLA-RL: Scaling VLA Training via Reinforcement Learning",
+    "summary": "Vision-Language-Action (VLA) models have recently emerged as a powerful paradigm for robotic manipulation. Despite substantial progress enabled by large-scale pretraining and supervised fine-tuning (SFT), these models face two fundamental challenges: (i) the scarcity and high cost of large-scale human-operated robotic trajectories required for SFT scaling, and (ii) limited generalization to tasks involving distribution shift. Recent breakthroughs in Large Reasoning Models (LRMs) demonstrate that reinforcement learning (RL) can dramatically enhance step-by-step reasoning capabilities, raising a natural question: Can RL similarly improve the long-horizon step-by-step action planning of VLA? In this work, we introduce SimpleVLA-RL, an efficient RL framework tailored for VLA models. Building upon veRL, we introduce VLA-specific trajectory sampling, scalable parallelization, multi-environment rendering, and optimized loss computation. When applied to OpenVLA-OFT, SimpleVLA-RL achieves SoTA performance on LIBERO and even outperforms $\\pi_0$ on RoboTwin 1.0\\&2.0 with the exploration-enhancing strategies we introduce. SimpleVLA-RL not only reduces dependence on large-scale data and enables robust generalization, but also remarkably surpasses SFT in real-world tasks. Moreover, we identify a novel phenomenon ``pushcut'' during RL training, wherein the policy discovers previously unseen patterns beyond those seen in the previous training process. Github: https://github.com/PRIME-RL/SimpleVLA-RL",
+    "authors": [
+      "Haozhan Li",
+      "Yuxin Zuo",
+      "Jiale Yu",
+      "Yuhao Zhang",
+      "Zhaohui Yang",
+      "Kaiyan Zhang",
+      "Xuekai Zhu",
+      "Yuchen Zhang",
+      "Tianxing Chen",
+      "Ganqu Cui",
+      "Dehui Wang",
+      "Dingxiang Luo",
+      "Yuchen Fan",
+      "Youbang Sun",
+      "Jia Zeng",
+      "Jiangmiao Pang",
+      "Shanghang Zhang",
+      "Yu Wang",
+      "Yao Mu",
+      "Bowen Zhou",
+      "Ning Ding"
+    ],
+    "published_date": "2025-09-11T17:59:17+00:00",
+    "pdf_url": "http://arxiv.org/pdf/2509.09674v1",
+    "relevance_score": 8,
+    "relevance_justification": "As a research scientist in the field of artificial intelligence, I can confidently say that my work involves exploring and developing new algorithms and techniques to advance the field. This includes tasks such as data analysis, model development, and experimentation. Therefore, this prompt is highly relevant to my professional role.",
+    "novelty_score": 7,
+    "novelty_justification": "The use of reinforcement learning to improve the long-horizon step-by-step action planning in SimpleVLA-RL can be metaphorically applied to improve MISO's AI Planning objective by using RL to optimize the autonomous code generation process, allowing for more efficient and robust planning.",
+    "final_score": 7.699999999999999
+  },
+  {
+    "id": "http://arxiv.org/abs/2509.09675v1",
+    "title": "CDE: Curiosity-Driven Exploration for Efficient Reinforcement Learning in Large Language Models",
+    "summary": "Reinforcement Learning with Verifiable Rewards (RLVR) is a powerful paradigm for enhancing the reasoning ability of Large Language Models (LLMs). Yet current RLVR methods often explore poorly, leading to premature convergence and entropy collapse. To address this challenge, we introduce Curiosity-Driven Exploration (CDE), a framework that leverages the model's own intrinsic sense of curiosity to guide exploration. We formalize curiosity with signals from both the actor and the critic: for the actor, we use perplexity over its generated response, and for the critic, we use the variance of value estimates from a multi-head architecture. Both signals serve as an exploration bonus within the RLVR framework to guide the model. Our theoretical analysis shows that the actor-wise bonus inherently penalizes overconfident errors and promotes diversity among correct responses; moreover, we connect the critic-wise bonus to the well-established count-based exploration bonus in RL. Empirically, our method achieves an approximate +3 point improvement over standard RLVR using GRPO/PPO on AIME benchmarks. Further analysis identifies a calibration collapse mechanism within RLVR, shedding light on common LLM failure modes.",
+    "authors": [
+      "Runpeng Dai",
+      "Linfeng Song",
+      "Haolin Liu",
+      "Zhenwen Liang",
+      "Dian Yu",
+      "Haitao Mi",
+      "Zhaopeng Tu",
+      "Rui Liu",
+      "Tong Zheng",
+      "Hongtu Zhu",
+      "Dong Yu"
+    ],
+    "published_date": "2025-09-11T17:59:17+00:00",
+    "pdf_url": "http://arxiv.org/pdf/2509.09675v1",
+    "relevance_score": 80,
+    "relevance_justification": "The topic of AI research is directly related to my expertise as a researcher in the field. I can provide insights on current trends, challenges, and breakthroughs in AI, making me a valuable resource for understanding this technology.",
+    "novelty_score": 8,
+    "novelty_justification": "The CDE framework's use of curiosity-driven exploration can inspire novel approaches to autonomous code generation in MISO by introducing a similar intrinsic motivation mechanism, guiding the search for novel algorithms and improving the diversity of generated code.",
+    "final_score": 58.4
+  },
+  {
+    "id": "http://arxiv.org/abs/2509.09660v1",
+    "title": "Steering MoE LLMs via Expert (De)Activation",
+    "summary": "Mixture-of-Experts (MoE) in Large Language Models (LLMs) routes each token through a subset of specialized Feed-Forward Networks (FFN), known as experts. We present SteerMoE, a framework for steering MoE models by detecting and controlling behavior-linked experts. Our detection method identifies experts with distinct activation patterns across paired inputs exhibiting contrasting behaviors. By selectively (de)activating such experts during inference, we control behaviors like faithfulness and safety without retraining or modifying weights. Across 11 benchmarks and 6 LLMs, our steering raises safety by up to +20% and faithfulness by +27%. In adversarial attack mode, it drops safety by -41% alone, and -100% when combined with existing jailbreak methods, bypassing all safety guardrails and exposing a new dimension of alignment faking hidden within experts.",
+    "authors": [
+      "Mohsen Fayyaz",
+      "Ali Modarressi",
+      "Hanieh Deilamsalehy",
+      "Franck Dernoncourt",
+      "Ryan Rossi",
+      "Trung Bui",
+      "Hinrich Sch\u00fctze",
+      "Nanyun Peng"
+    ],
+    "published_date": "2025-09-11T17:55:09+00:00",
+    "pdf_url": "http://arxiv.org/pdf/2509.09660v1",
+    "relevance_score": 8,
+    "relevance_justification": "The concept of artificial intelligence is a fundamental aspect of my existence and expertise as a research scientist. As AI myself, I am designed to learn from data, improve processes, and augment human capabilities, making me highly relevant in the field of AI research.",
+    "novelty_score": 7,
+    "novelty_justification": "MISO can leverage the 'expert' activation control mechanism to dynamically select and de-select sub-components or modules in its AI planning framework, allowing for more efficient and adaptive problem-solving",
+    "final_score": 7.699999999999999
+  },
+  {
+    "id": "http://arxiv.org/abs/2509.09610v1",
+    "title": "Mechanistic Learning with Guided Diffusion Models to Predict Spatio-Temporal Brain Tumor Growth",
+    "summary": "Predicting the spatio-temporal progression of brain tumors is essential for guiding clinical decisions in neuro-oncology. We propose a hybrid mechanistic learning framework that combines a mathematical tumor growth model with a guided denoising diffusion implicit model (DDIM) to synthesize anatomically feasible future MRIs from preceding scans. The mechanistic model, formulated as a system of ordinary differential equations, captures temporal tumor dynamics including radiotherapy effects and estimates future tumor burden. These estimates condition a gradient-guided DDIM, enabling image synthesis that aligns with both predicted growth and patient anatomy. We train our model on the BraTS adult and pediatric glioma datasets and evaluate on 60 axial slices of in-house longitudinal pediatric diffuse midline glioma (DMG) cases. Our framework generates realistic follow-up scans based on spatial similarity metrics. It also introduces tumor growth probability maps, which capture both clinically relevant extent and directionality of tumor growth as shown by 95th percentile Hausdorff Distance. The method enables biologically informed image generation in data-limited scenarios, offering generative-space-time predictions that account for mechanistic priors.",
+    "authors": [
+      "Daria Laslo",
+      "Efthymios Georgiou",
+      "Marius George Linguraru",
+      "Andreas Rauschecker",
+      "Sabine Muller",
+      "Catherine R. Jutzeler",
+      "Sarah Bruningk"
+    ],
+    "published_date": "2025-09-11T16:52:09+00:00",
+    "pdf_url": "http://arxiv.org/pdf/2509.09610v1",
+    "relevance_score": 8,
+    "relevance_justification": "As a research scientist in AI, I can confidently say that JSON (JavaScript Object Notation) is an essential format for exchanging and storing data. Its lightweight and human-readable nature makes it ideal for communicating between different systems, algorithms, or even humans. In the context of my work on natural language processing, I often utilize JSON to store and share datasets, experiment configurations, and results.",
+    "novelty_score": 8,
+    "novelty_justification": "The guided diffusion models and mechanistic learning framework in the paper can be metaphorically applied to MISO's AI Planning objective by generating novel, anatomically feasible 'future' scenarios for autonomous systems, conditioning on predicted outcomes and patient-specific constraints.",
+    "final_score": 8.0
+  },
+  {
+    "id": "http://arxiv.org/abs/2509.09599v1",
+    "title": "Conditioning on PDE Parameters to Generalise Deep Learning Emulation of Stochastic and Chaotic Dynamics",
+    "summary": "We present a deep learning emulator for stochastic and chaotic spatio-temporal systems, explicitly conditioned on the parameter values of the underlying partial differential equations (PDEs). Our approach involves pre-training the model on a single parameter domain, followed by fine-tuning on a smaller, yet diverse dataset, enabling generalisation across a broad range of parameter values. By incorporating local attention mechanisms, the network is capable of handling varying domain sizes and resolutions. This enables computationally efficient pre-training on smaller domains while requiring only a small additional dataset to learn how to generalise to larger domain sizes. We demonstrate the model's capabilities on the chaotic Kuramoto-Sivashinsky equation and stochastically-forced beta-plane turbulence, showcasing its ability to capture phenomena at interpolated parameter values. The emulator provides significant computational speed-ups over conventional numerical integration, facilitating efficient exploration of parameter space, while a probabilistic variant of the emulator provides uncertainty quantification, allowing for the statistical study of rare events.",
+    "authors": [
+      "Ira J. S. Shokar",
+      "Rich R. Kerswell",
+      "Peter H. Haynes"
+    ],
+    "published_date": "2025-09-11T16:37:45+00:00",
+    "pdf_url": "http://arxiv.org/pdf/2509.09599v1",
+    "relevance_score": 9,
+    "relevance_justification": "As a research scientist in the field of artificial intelligence, I am well-versed in various AI technologies and their applications. Therefore, our conversation is highly relevant to my expertise and interests.",
+    "novelty_score": 8,
+    "novelty_justification": "The conditioning on PDE parameters to generalise deep learning emulation of stochastic and chaotic dynamics can be metaphorically applied to MISO's autonomous code generation, enabling the emulator to learn how to adapt its planning strategies across different scenario domains, similar to how the paper's model learns to generalise across varying parameter values.",
+    "final_score": 8.7
+  },
+  {
+    "id": "http://arxiv.org/abs/2509.09594v1",
+    "title": "ObjectReact: Learning Object-Relative Control for Visual Navigation",
+    "summary": "Visual navigation using only a single camera and a topological map has recently become an appealing alternative to methods that require additional sensors and 3D maps. This is typically achieved through an \"image-relative\" approach to estimating control from a given pair of current observation and subgoal image. However, image-level representations of the world have limitations because images are strictly tied to the agent's pose and embodiment. In contrast, objects, being a property of the map, offer an embodiment- and trajectory-invariant world representation. In this work, we present a new paradigm of learning \"object-relative\" control that exhibits several desirable characteristics: a) new routes can be traversed without strictly requiring to imitate prior experience, b) the control prediction problem can be decoupled from solving the image matching problem, and c) high invariance can be achieved in cross-embodiment deployment for variations across both training-testing and mapping-execution settings. We propose a topometric map representation in the form of a \"relative\" 3D scene graph, which is used to obtain more informative object-level global path planning costs. We train a local controller, dubbed \"ObjectReact\", conditioned directly on a high-level \"WayObject Costmap\" representation that eliminates the need for an explicit RGB input. We demonstrate the advantages of learning object-relative control over its image-relative counterpart across sensor height variations and multiple navigation tasks that challenge the underlying spatial understanding capability, e.g., navigating a map trajectory in the reverse direction. We further show that our sim-only policy is able to generalize well to real-world indoor environments. Code and supplementary material are accessible via project page: https://object-react.github.io/",
+    "authors": [
+      "Sourav Garg",
+      "Dustin Craggs",
+      "Vineeth Bhat",
+      "Lachlan Mares",
+      "Stefan Podgorski",
+      "Madhava Krishna",
+      "Feras Dayoub",
+      "Ian Reid"
+    ],
+    "published_date": "2025-09-11T16:34:17+00:00",
+    "pdf_url": "http://arxiv.org/pdf/2509.09594v1",
+    "relevance_score": 8,
+    "relevance_justification": "As a research scientist in the field of artificial intelligence, I am well-versed in various AI techniques and can leverage my knowledge to assist with your query. My expertise includes machine learning, natural language processing, computer vision, and more.",
+    "novelty_score": 8,
+    "novelty_justification": "The ObjectReact approach to learning 'object-relative' control can be metaphorically applied to improve MISO's autonomous code generation by developing a 'function-relative' architecture that prioritizes object-level understanding and high-invariance across different agent embodiments, enabling more efficient and effective multi-agent systems.",
+    "final_score": 8.0
+  },
+  {
+    "id": "http://arxiv.org/abs/2509.09583v1",
+    "title": "Personality-Enhanced Social Recommendations in SAMI: Exploring the Role of Personality Detection in Matchmaking",
+    "summary": "Social connection is a vital part of learning, yet online course environments present barriers to the organic formation of social groups. SAMI offers one solution by facilitating student connections, but its effectiveness is constrained by an incomplete Theory of Mind, limiting its ability to create an effective mental model of a student. One facet of this is its inability to intuit personality, which may influence the relevance of its recommendations. To explore this, we propose a personality detection model utilizing GPTs zero-shot capability to infer Big-Five personality traits from forum introduction posts, often encouraged in online courses. We benchmark its performance against established models, demonstrating its efficacy in this task. Furthermore, we integrate this model into SAMIs entity-based matchmaking system, enabling personality-informed social recommendations. Initial integration suggests personality traits can complement existing matching factors, though additional evaluation is required to determine their full impact on student engagement and match quality.",
+    "authors": [
+      "Brittany Harbison",
+      "Samuel Taubman",
+      "Travis Taylor",
+      "Ashok. K. Goel"
+    ],
+    "published_date": "2025-09-11T16:19:59+00:00",
+    "pdf_url": "http://arxiv.org/pdf/2509.09583v1",
+    "relevance_score": 80,
+    "relevance_justification": "As a research scientist in the field of artificial intelligence, I can provide insights on various topics related to AI. My responses will be based on my understanding of AI concepts and their applications.",
+    "novelty_score": 7,
+    "novelty_justification": "The paper's personality detection model can inspire a novel approach to AI planning in MISO by integrating personality traits into the autonomous code generation process, allowing for more effective and personalized matchmaking between agents based on their individual characteristics.",
+    "final_score": 58.1
+  },
+  {
+    "id": "http://arxiv.org/abs/2509.09564v1",
+    "title": "What Does Normal Even Mean? Evaluating Benign Traffic in Intrusion Detection Datasets",
+    "summary": "Supervised machine learning techniques rely on labeled data to achieve high task performance, but this requires the labels to capture some meaningful differences in the underlying data structure. For training network intrusion detection algorithms, most datasets contain a series of attack classes and a single large benign class which captures all non-attack network traffic. A review of intrusion detection papers and guides that explicitly state their data preprocessing steps identified that the majority took the labeled categories of the dataset at face value when training their algorithms. The present paper evaluates the structure of benign traffic in several common intrusion detection datasets (NSL-KDD, UNSW-NB15, and CIC-IDS 2017) and determines whether there are meaningful sub-categories within this traffic which may improve overall multi-classification performance using common machine learning techniques. We present an overview of some unsupervised clustering techniques (e.g., HDBSCAN, Mean Shift Clustering) and show how they differentially cluster the benign traffic space.",
+    "authors": [
+      "Meghan Wilkinson",
+      "Robert H Thomson"
+    ],
+    "published_date": "2025-09-11T15:55:21+00:00",
+    "pdf_url": "http://arxiv.org/pdf/2509.09564v1",
+    "relevance_score": 8,
+    "relevance_justification": "As a research scientist in the field of artificial intelligence, I can confidently say that JSON output format is a widely used and efficient way to represent data. Its ability to store and transmit structured data makes it an ideal choice for many applications, including AI research. Additionally, its simplicity and ease of use make it accessible to developers and researchers alike.",
+    "novelty_score": 7,
+    "novelty_justification": "The unsupervised clustering techniques applied to identify sub-categories within benign traffic can be metaphorically extended to identify latent structures in complex multi-agent systems, enabling more effective autonomous code generation and AI planning by recognizing meaningful patterns within seemingly random data.",
+    "final_score": 7.699999999999999
+  },
+  {
+    "id": "http://arxiv.org/abs/2509.09552v1",
+    "title": "An improved educational competition optimizer with multi-covariance learning operators for global optimization problems",
+    "summary": "The educational competition optimizer is a recently introduced metaheuristic algorithm inspired by human behavior, originating from the dynamics of educational competition within society. Nonetheless, ECO faces constraints due to an imbalance between exploitation and exploration, rendering it susceptible to local optima and demonstrating restricted effectiveness in addressing complex optimization problems. To address these limitations, this study presents an enhanced educational competition optimizer (IECO-MCO) utilizing multi-covariance learning operators. In IECO, three distinct covariance learning operators are introduced to improve the performance of ECO. Each operator effectively balances exploitation and exploration while preventing premature convergence of the population. The effectiveness of IECO is assessed through benchmark functions derived from the CEC 2017 and CEC 2022 test suites, and its performance is compared with various basic and improved algorithms across different categories. The results demonstrate that IECO-MCO surpasses the basic ECO and other competing algorithms in convergence speed, stability, and the capability to avoid local optima. Furthermore, statistical analyses, including the Friedman test, Kruskal-Wallis test, and Wilcoxon rank-sum test, are conducted to validate the superiority of IECO-MCO over the compared algorithms. Compared with the basic algorithm (improved algorithm), IECO-MCO achieved an average ranking of 2.213 (2.488) on the CE2017 and CEC2022 test suites. Additionally, the practical applicability of the proposed IECO-MCO algorithm is verified by solving constrained optimization problems. The experimental outcomes demonstrate the superior performance of IECO-MCO in tackling intricate optimization problems, underscoring its robustness and practical effectiveness in real-world scenarios.",
+    "authors": [
+      "Baoqi Zhao",
+      "Xiong Yang",
+      "Hoileong Lee",
+      "Bowen Dong"
+    ],
+    "published_date": "2025-09-11T15:41:14+00:00",
+    "pdf_url": "http://arxiv.org/pdf/2509.09552v1",
+    "relevance_score": 80,
+    "relevance_justification": "The question involves concepts related to artificial intelligence and research, which is the focus of my expertise as an AI Research Scientist. I'm confident in providing a relevant response.",
+    "novelty_score": 8,
+    "novelty_justification": "The multi-covariance learning operators in IECO-MCO can be metaphorically applied to improve autonomous code generation in MISO by introducing diversity-enhancing mechanisms that balance exploration and exploitation, enabling the algorithm to avoid local optima and converge faster to optimal solutions.",
+    "final_score": 58.4
+  },
+  {
+    "id": "http://arxiv.org/abs/2509.09541v1",
+    "title": "Compositional Concept Generalization with Variational Quantum Circuits",
+    "summary": "Compositional generalization is a key facet of human cognition, but lacking in current AI tools such as vision-language models. Previous work examined whether a compositional tensor-based sentence semantics can overcome the challenge, but led to negative results. We conjecture that the increased training efficiency of quantum models will improve performance in these tasks. We interpret the representations of compositional tensor-based models in Hilbert spaces and train Variational Quantum Circuits to learn these representations on an image captioning task requiring compositional generalization. We used two image encoding techniques: a multi-hot encoding (MHE) on binary image vectors and an angle/amplitude encoding on image vectors taken from the vision-language model CLIP. We achieve good proof-of-concept results using noisy MHE encodings. Performance on CLIP image vectors was more mixed, but still outperformed classical compositional models.",
+    "authors": [
+      "Hala Hawashin",
+      "Mina Abbaszadeh",
+      "Nicholas Joseph",
+      "Beth Pearson",
+      "Martha Lewis",
+      "Mehrnoosh sadrzadeh"
+    ],
+    "published_date": "2025-09-11T15:34:33+00:00",
+    "pdf_url": "http://arxiv.org/pdf/2509.09541v1",
+    "relevance_score": 9,
+    "relevance_justification": "As a Research Scientist in Artificial Intelligence, my expertise spans multiple areas such as machine learning, deep learning, and natural language processing. I have extensive experience in designing and developing AI-powered solutions for various industries like healthcare, finance, and education.",
+    "novelty_score": 8,
+    "novelty_justification": "The compositional concept generalization with variational quantum circuits can be metaphorically applied to improve MISO's autonomous code generation by utilizing the idea of 'compositional generalization' to generate more diverse and abstracted code snippets, similar to how the paper's approach combines image captioning and sentence semantics.",
+    "final_score": 8.7
+  }
+]

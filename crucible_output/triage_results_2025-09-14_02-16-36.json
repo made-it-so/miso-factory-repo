@@ -1,0 +1,33 @@
+[
+  {
+    "id": "http://arxiv.org/abs/2509.09614v1",
+    "title": "LoCoBench: A Benchmark for Long-Context Large Language Models in Complex Software Engineering",
+    "summary": "The emergence of long-context language models with context windows extending to millions of tokens has created new opportunities for sophisticated code understanding and software development evaluation. We propose LoCoBench, a comprehensive benchmark specifically designed to evaluate long-context LLMs in realistic, complex software development scenarios. Unlike existing code evaluation benchmarks that focus on single-function completion or short-context tasks, LoCoBench addresses the critical evaluation gap for long-context capabilities that require understanding entire codebases, reasoning across multiple files, and maintaining architectural consistency across large-scale software systems. Our benchmark provides 8,000 evaluation scenarios systematically generated across 10 programming languages, with context lengths spanning 10K to 1M tokens, a 100x variation that enables precise assessment of long-context performance degradation in realistic software development settings. LoCoBench introduces 8 task categories that capture essential long-context capabilities: architectural understanding, cross-file refactoring, multi-session development, bug investigation, feature implementation, code comprehension, integration testing, and security analysis. Through a 5-phase pipeline, we create diverse, high-quality scenarios that challenge LLMs to reason about complex codebases at unprecedented scale. We introduce a comprehensive evaluation framework with 17 metrics across 4 dimensions, including 8 new evaluation metrics, combined in a LoCoBench Score (LCBS). Our evaluation of state-of-the-art long-context models reveals substantial performance gaps, demonstrating that long-context understanding in complex software development represents a significant unsolved challenge that demands more attention. LoCoBench is released at: https://github.com/SalesforceAIResearch/LoCoBench.",
+    "authors": [
+      "Jielin Qiu",
+      "Zuxin Liu",
+      "Zhiwei Liu",
+      "Rithesh Murthy",
+      "Jianguo Zhang",
+      "Haolin Chen",
+      "Shiyu Wang",
+      "Ming Zhu",
+      "Liangwei Yang",
+      "Juntao Tan",
+      "Zhepeng Cen",
+      "Cheng Qian",
+      "Shelby Heinecke",
+      "Weiran Yao",
+      "Silvio Savarese",
+      "Caiming Xiong",
+      "Huan Wang"
+    ],
+    "published_date": "2025-09-11T16:55:04+00:00",
+    "pdf_url": "http://arxiv.org/pdf/2509.09614v1",
+    "relevance_score": 8.0,
+    "relevance_justification": "The paper focuses on evaluating long-context language models in complex software development scenarios, which aligns with MISO's goals of autonomous AI engineering, planning, and reasoning, as well as human-AI interaction.",
+    "novelty_score": 8.0,
+    "novelty_justification": "The LoCoBench framework can be adapted to evaluate the autonomous code generation capabilities of MISO's Multi-Agent Systems, providing a novel and comprehensive benchmark for assessing long-context understanding in software development scenarios",
+    "final_score": 8.0
+  }
+]

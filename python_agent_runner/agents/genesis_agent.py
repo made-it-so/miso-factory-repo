@@ -6,7 +6,7 @@ from .simulation_agent import SimulationAgent
 from .code_generation_agent import CodeGenerationAgent
 from .debugging_agent import DebuggingAgent
 from .security_agent import SecurityAgent
-from shared.code_utils import summarize_python_code
+from ..shared.code_utils import summarize_python_code
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 

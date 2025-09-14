@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Detail</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+        }
+        
+        .header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .main-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .weather-details {
+            width: 60%;
+        }
+        
+        .weather-data {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">Weather Details</header>
+        <main>
+            <div class="main-content">
+                <section class="weather-details">
+                    {% if weather %}
+                    <h2>{{ weather.city }}, {{ weather.country }}</h2>
+                    <ul>
+                        <li class="weather-data"><strong>Temperature:</strong> {{ weather.temperature }}°C</li>
+                        <li class="weather-data"><strong>Condition:</strong> {{ weather.condition }}</li>
+                        <li class="weather-data"><strong>Precipitation:</strong> {{ weather.precipitation }}%</li>
+                        <li class="weather-data"><strong>Wind Speed:</strong> {{ weather.wind_speed }} km/h</li>
+                    </ul>
+                    {% else %}
+                    <p>No weather data available.</p>
+                    {% endif %}
+                </section>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

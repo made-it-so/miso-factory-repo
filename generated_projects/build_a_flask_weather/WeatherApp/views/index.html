@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        
+        .weather-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+        }
+        
+        .weather-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="weather-headline"></h1>
+    <div class="weather-container">
+        <h2 id="weather-city"></h2>
+        <div class="weather-info">
+            <span id="weather-condition"></span>
+            <span id="weather-temp"></span>°C
+            <span id="weather-humidity"></span>% Humidity
+        </div>
+    </div>
+    
+    <script src="static/js/index.js"></script>
+</body>
+</html>
