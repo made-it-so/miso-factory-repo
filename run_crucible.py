@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from python_agent_runner.agents.crucible_master_agent import CrucibleMasterAgent
 
 def run_master_agent():
-    """Finds the latest analysis reports and runs the master agent to prioritize them."""
+    """Finds the latest analysis reports, prioritizes them, and initiates the Gauntlet."""
     print("--- [Crucible Master Agent Initialized] ---")
     
     output_dir = "crucible_output"
@@ -33,8 +33,10 @@ def run_master_agent():
         print("No valid analysis reports found in the latest directory.")
         return
 
-    # Run the prioritization logic
+    # Instantiate the master agent
     master_agent = CrucibleMasterAgent()
+    
+    # Run the prioritization logic
     mip_backlog = master_agent.prioritize_reports(analysis_reports)
 
     if mip_backlog:
@@ -44,7 +46,13 @@ def run_master_agent():
         with open(backlog_filename, 'w', encoding='utf-8') as f:
             json.dump(mip_backlog, f, indent=2)
         
-        print(f"? Prioritization complete. MISO Improvement Proposal backlog saved to: {backlog_filename}")
+        print(f"? Prioritization complete. MIP backlog saved to: {backlog_filename}")
+
+        # Automatically initiate the Gauntlet for the top proposal
+        print("\n--- [Automatically Initiating Gauntlet for Top Proposal] ---")
+        top_proposal = mip_backlog[0]
+        master_agent.initiate_upgrade_gauntlet(top_proposal)
+
     else:
         print("?? Prioritization complete, but no valid proposals were generated.")
 

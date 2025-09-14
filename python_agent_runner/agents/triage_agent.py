@@ -7,7 +7,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(level
 
 class TriageAgent:
     """Scores and filters papers based on relevance and novelty."""
-    def __init__(self, model="llama3", final_threshold=7.0):
+    def __init__(self, model="llama3", final_threshold=6.0):
         self.logger = logging.getLogger(self.__class__.__name__)
         self.model = model
         self.final_threshold = final_threshold

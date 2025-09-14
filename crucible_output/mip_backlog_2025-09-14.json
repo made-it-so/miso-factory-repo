@@ -1,26 +1,86 @@
 [
   {
-    "key_takeaways": [
-      "The paper presents a comprehensive evaluation of various AI models in software engineering tasks, highlighting their strengths and weaknesses across different themes.",
-      "The study shows that some AI models perform better than others in specific areas, such as algorithms or data structures.",
-      "The authors demonstrate the potential for AI-powered software engineering tools to improve development efficiency, maintainability, and reliability."
-    ],
-    "extracted_techniques": [
-      "Transformer-based architectures (e.g., gpt5mini)",
-      "Gemini-2.5-Pro model",
-      "Long-context scoring systems"
-    ],
-    "application_to_miso": {
-      "Title: Enhancing MISO's Code Generation and Refactoring Capabilities with AI-Powered Software Engineering Tools, titled ": "MISO can leverage the findings from this paper to develop more effective AI-powered software engineering tools that improve code generation and refactoring capabilities. By integrating transformer-based architectures and Gemini-2.5-Pro models, MISO can enhance its ability to generate high-quality code and refactor existing codebases efficiently. Additionally, by incorporating long-context scoring systems, MISO can further improve the accuracy of its generated code and reduce errors. This would enable MISO to provide more reliable and maintainable software engineering services, ultimately improving development efficiency and reducing costs."
-    },
-    "high_level_implementation_plan": [
+    "sections": [
       {
-        "Step 1: Integrate Transformer-Based Architectures and Gemini-2.5-Pro Models into MISO's Code Generation Module, titled ": "Integrate the transformer-based architectures and Gemini-2.5-Pro models into MISO's code generation module to enable high-quality code generation and refactoring."
+        "title": "Introduction",
+        "key_findings": [
+          "The authors introduce Curiosity-Driven Exploration (CDE), a framework that leverages the model's own intrinsic sense of curiosity to guide exploration in Large Language Models (LLMs)."
+        ]
       },
       {
-        "Step 2: Implement Long-Context Scoring Systems for Improved Accuracy, titled ": "Implement long-context scoring systems within MISO's code generation module to further improve the accuracy of generated code and reduce errors."
+        "title": "Empirical Evaluation",
+        "key_findings": [
+          "+3 points over standard RLVR using GRPO/PPO on AIME benchmarks",
+          "Calibration collapse: the model's confidence progressively decouples from its correctness, and adding PPL bonus mitigates this miscalculation"
+        ]
+      },
+      {
+        "title": "Curiosity Bonus",
+        "key_findings": [
+          "The curiosity bonus is used to encourage exploration while maintaining response quality.",
+          "The bonus weight \u03c9t controls the exploration-aggression level, while the clipping ratio \u03ba prevents the bonus from dominating the learning signal."
+        ]
+      },
+      {
+        "title": "Critic Curiosity",
+        "key_findings": [
+          "The critic in the actor-critic framework provides a higher-level understanding of the prompt-response pair by estimating the expected reward-to-go.",
+          "The standard deviation across K heads serves as a curiosity signal, guiding the policy toward regions of high disagreement where the value function remains uncertain and under-explored."
+        ]
+      },
+      {
+        "title": "Exploration Bonuses",
+        "key_findings": [
+          "Decay of the bonus weight is necessary for gradual shift from exploration to exploitation.",
+          "Strong exploration in the early phase is crucial; the staircase scheme proved most effective by sustaining high exploration initially and then removing the bonus abruptly."
+        ]
+      },
+      {
+        "title": "Entropy Dynamics",
+        "key_findings": [
+          "The PPL bonus alleviates entropy collapse, promoting exploration.",
+          "Decaying the bonus weight is essential for ensuring stable convergence while supporting effective exploration."
+        ]
+      },
+      {
+        "title": "Calibration",
+        "key_findings": [
+          "The PPL bonus improves calibration by suppressing confident errors (low-PPL incorrect trajectories)."
+        ]
+      },
+      {
+        "title": "Multi-Head Critic Dynamics",
+        "key_findings": [
+          "The average value of the multi-head exploration bonus Bcritic decreases steadily as training progresses, reflecting reduced disagreement among critic heads."
+        ]
       }
     ],
-    "impact_score": 8
+    "references": [],
+    "paper_title": "CDE: Curiosity-Driven Exploration for Efficient Reinforcement Learning in Large Language Models",
+    "original_paper_data": {
+      "id": "http://arxiv.org/abs/2509.09675v1",
+      "title": "CDE: Curiosity-Driven Exploration for Efficient Reinforcement Learning in Large Language Models",
+      "summary": "Reinforcement Learning with Verifiable Rewards (RLVR) is a powerful paradigm for enhancing the reasoning ability of Large Language Models (LLMs). Yet current RLVR methods often explore poorly, leading to premature convergence and entropy collapse. To address this challenge, we introduce Curiosity-Driven Exploration (CDE), a framework that leverages the model's own intrinsic sense of curiosity to guide exploration. We formalize curiosity with signals from both the actor and the critic: for the actor, we use perplexity over its generated response, and for the critic, we use the variance of value estimates from a multi-head architecture. Both signals serve as an exploration bonus within the RLVR framework to guide the model. Our theoretical analysis shows that the actor-wise bonus inherently penalizes overconfident errors and promotes diversity among correct responses; moreover, we connect the critic-wise bonus to the well-established count-based exploration bonus in RL. Empirically, our method achieves an approximate +3 point improvement over standard RLVR using GRPO/PPO on AIME benchmarks. Further analysis identifies a calibration collapse mechanism within RLVR, shedding light on common LLM failure modes.",
+      "authors": [
+        "Runpeng Dai",
+        "Linfeng Song",
+        "Haolin Liu",
+        "Zhenwen Liang",
+        "Dian Yu",
+        "Haitao Mi",
+        "Zhaopeng Tu",
+        "Rui Liu",
+        "Tong Zheng",
+        "Hongtu Zhu",
+        "Dong Yu"
+      ],
+      "published_date": "2025-09-11T17:59:17+00:00",
+      "pdf_url": "http://arxiv.org/pdf/2509.09675v1",
+      "relevance_score": 6.0,
+      "relevance_justification": "The paper's focus on curiosity-driven exploration for efficient reinforcement learning in large language models touches on MISO's objectives related to AI planning, reasoning, and simulation, but may not directly contribute to the project's core goals of multi-agent systems or human-AI interaction.",
+      "novelty_score": 8.0,
+      "novelty_justification": "The curiosity-driven exploration framework from the paper can be structurally applied to MISO's autonomous code generation objective by introducing a curiosity metric that rewards diverse and novel code snippet explorations, promoting more effective search spaces for AI planning.",
+      "final_score": 6.6
+    }
   }
 ]
