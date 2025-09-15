@@ -26,29 +26,36 @@ class GenesisAgent:
     def _create_project_files(self, project_path: str, file_structure: dict) -> bool:
         """Recursively creates project files, building and passing context."""
         project_context = {}
-        def process_level(current_path, structure):
-            os.makedirs(current_path, exist_ok=True)
-            for name, content in structure.items():
-                full_path = os.path.join(current_path, name)
-                relative_path = os.path.relpath(full_path, start=project_path)
-                if isinstance(content, dict):
-                    if not process_level(full_path, content): return False
-                elif isinstance(content, str):
-                    generated_code = self.code_generation_agent.generate_code(relative_path, content, project_context)
-                    if generated_code is None:
-                        self.logger.error(f"Halting: CodeGenerationAgent failed for {full_path}")
-                        return False
-                    with open(full_path, 'w', encoding='utf-8') as f: f.write(generated_code)
-                    self.logger.info(f"Successfully wrote file: {full_path}")
-                    if relative_path.endswith('.py'):
-                        summary = summarize_python_code(generated_code)
-                        project_context[relative_path] = summary
-                        self.logger.info(f"Updated project context for {relative_path}")
-            return True
-        return process_level(project_path, file_structure)
+        try:
+            def process_level(current_path, structure):
+                os.makedirs(current_path, exist_ok=True)
+                for name, content in structure.items():
+                    full_path = os.path.join(current_path, name)
+                    relative_path = os.path.relpath(full_path, start=project_path)
+                    if isinstance(content, dict):
+                        if not process_level(full_path, content): return False
+                    elif isinstance(content, str):
+                        generated_code = self.code_generation_agent.generate_code(relative_path, content, project_context)
+                        if generated_code is None:
+                            self.logger.error(f"Halting: CodeGenerationAgent failed for {full_path}")
+                            return False
+                        
+                        # THE FIX: Ensure parent directory exists before writing the file
+                        os.makedirs(os.path.dirname(full_path), exist_ok=True)
+                        
+                        with open(full_path, 'w', encoding='utf-8') as f: f.write(generated_code)
+                        self.logger.info(f"Successfully wrote file: {full_path}")
+                        if relative_path.endswith('.py'):
+                            summary = summarize_python_code(generated_code)
+                            project_context[relative_path] = summary
+                            self.logger.info(f"Updated project context for {relative_path}")
+                return True
+            return process_level(project_path, file_structure)
+        except Exception as e:
+            self.logger.error(f"An error occurred during file creation: {e}")
+            return False
 
     def create_codebase(self, proposal: dict):
-        """The main entry point to create a new codebase from a proposal."""
         project_name = proposal.get('project_name', 'untitled_project').replace(' ', '_').lower()
         objective = proposal.get("objective", "No objective provided.")
         self.logger.info(f"--- Starting New Project: {project_name} ---")
@@ -77,7 +84,7 @@ class GenesisAgent:
         self.logger.info("Phase 4: Debugging...")
         if not self.debugging_agent.debug_codebase(project_path):
             self.logger.warning("Debugging phase completed with unresolved issues.")
-            # Continue to security scan even if debugging fails to provide a complete report
+            # Continue to security scan to provide a complete report
         
         # 5. SECURE
         self.logger.info("Phase 5: Security Scan...")
@@ -90,4 +97,4 @@ class GenesisAgent:
             return {"status": "FAIL", "reason": "The security scan itself failed.", "output_path": project_path, "security_report": sec_report}
 
         self.logger.info(f"--- Project Pipeline Completed Successfully. Output at: {project_path} ---")
-        return {"status": "SUCCESS", "reason": "Codebase generated, debugged, and secured successfully.", "output_path": project_path}
+        return {"status": "SUCCESS", "reason": "Codebase generated and debugged successfully.", "output_path": project_path}

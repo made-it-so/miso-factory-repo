@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Logged Events</title>
+    <style>
+        table {
+            font-family: Arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Logged Events</h1>
+    <table id="logged-events">
+        <tr>
+            <th>Date/Time</th>
+            <th>Action/Error Type</th>
+            <th>Description</th>
+        </tr>
+        {% for event in events %}
+        <tr>
+            <td>{{ event.datetime }}</td>
+            <td>{{ event.event_type }}</td>
+            <td>{{ event.description }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

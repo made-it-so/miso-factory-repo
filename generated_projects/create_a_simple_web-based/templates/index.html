@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro Timer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        
+        .timer-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+        
+        .work-interval-container,
+        .break-container {
+            width: 300px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .work-interval-label,
+        .break-label {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .start-button,
+        .stop-button,
+        .reset-button {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        .start-button:hover,
+        .stop-button:hover,
+        .reset-button:hover {
+            background-color: #3e8e41;
+        }
+    </style>
+</head>
+<body>
+    <div class="timer-container">
+        <div class="work-interval-container">
+            <span class="work-interval-label">Work Interval:</span>
+            <input type="number" id="work-interval" value="25">
+        </div>
+        <div class="break-container">
+            <span class="break-label">Break Length:</span>
+            <input type="number" id="break-length" value="5">
+        </div>
+    </div>
+    <button id="start-button" onclick="startTimer()">Start</button>
+    <button id="stop-button" onclick="stopTimer()" style="display: none;">Stop</button>
+    <button id="reset-button" onclick="resetTimer()" style="display: none;">Reset</button>
+    
+    <script>
+        let workInterval = 0;
+        let breakLength = 0;
+        let timerInterval = null;
+        let isRunning = false;
+
+        function startTimer() {
+            workInterval = parseInt(document.getElementById('work-interval').value);
+            breakLength = parseInt(document.getElementById('break-length').value);
+            timerInterval = setInterval(updateTimer, 1000);
+            isRunning = true;
+            document.getElementById('start-button').style.display = 'none';
+            document.getElementById('stop-button').style.display = 'block';
+            document.getElementById('reset-button').style.display = 'block';
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            isRunning = false;
+            document.getElementById('start-button').style.display = 'block';
+            document.getElementById('stop-button').style.display = 'none';
+            document.getElementById('reset-button').style.display = 'none';
+        }
+
+        function resetTimer() {
+            stopTimer();
+            workInterval = 0;
+            breakLength = 0;
+        }
+
+        function updateTimer() {
+            if (isRunning) {
+                // Update timer logic here
+                // For now, just increment the interval and check for completion
+                let secondsElapsed = Math.floor((Date.now() - timerInterval) / 1000);
+                if (secondsElapsed >= workInterval) {
+                    stopTimer();
+                    alert('Work interval complete!');
+                } else if (secondsElapsed >= (workInterval + breakLength)) {
+                    stopTimer();
+                    alert('Break time complete!');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
