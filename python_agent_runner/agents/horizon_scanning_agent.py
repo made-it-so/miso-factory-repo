@@ -10,7 +10,7 @@ class HorizonScanningAgent:
         self.logger = logging.getLogger(self.__class__.__name__)
         self.logger.info("HorizonScanningAgent initialized.")
 
-    def scan_for_research(self, categories=['cs.AI', 'cs.LG', 'cs.SE'], max_results=25):
+    def scan_for_research(self, categories=['cs.AI', 'cs.LG', 'cs.SE', 'cs.HC'], max_results=25):
         """
         Scans for new papers in the last 7 days.
         Returns a list of dictionaries, each representing a paper.

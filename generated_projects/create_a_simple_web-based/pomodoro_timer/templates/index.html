@@ -1,0 +1,28 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro Timer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Pomodoro Timer</h1>
+        <p id="timer-label"></p>
+        <button id="start-stop-btn">Start</button>
+        <button id="reset-btn">Reset</button>
+    </header>
+    <main>
+        <section id="work-session">
+            <h2>Work Session:</h2>
+            <progress id="work-progress" value="0" max="25"></progress>
+        </section>
+        <section id="break-session">
+            <h2>Break Session:</h2>
+            <progress id="break-progress" value="0" max="5"></progress>
+        </section>
+    </main>
+</body>
+</html>

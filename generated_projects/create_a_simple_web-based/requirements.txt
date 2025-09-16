@@ -1,0 +1,3 @@
+
+dependency_1==version_1
+dependency_2==version_2

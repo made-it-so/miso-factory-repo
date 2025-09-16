@@ -25,7 +25,7 @@ class DebuggingAgent:
             )
             errors = [line for line in result.stdout.splitlines() if 'E:' in line or 'F:' in line]
             if not errors:
-                self.logger.info(f"{file_path} is clean.")
+                self.logger.info(f"{os.path.basename(file_path)} is clean.")
                 return ""
             return "\n".join(errors)
         except FileNotFoundError:
@@ -39,28 +39,24 @@ class DebuggingAgent:
         """Creates a prompt for the LLM to debug the code."""
         return f"""
         You are an expert Python programmer and debugger. Your task is to fix the errors in the following Python code.
-
         **Source Code:**
         ```python
         {code}
         ```
-
         **Pylint Errors:**
         ```
         {errors}
         ```
-
         **Instructions:**
         1.  Analyze the provided Pylint errors and the source code.
         2.  Correct the code to fix all the identified errors.
-        3.  Ensure the corrected code is clean, syntactically correct, and maintains the original functionality.
-        4.  Your entire response must be ONLY the raw, corrected, and complete Python source code for the file. Do not add any explanations or markdown.
+        3.  Your entire response must be ONLY the raw, corrected, and complete Python source code for the file. Do not add any explanations or markdown.
         """
 
     def _debug_file(self, file_path: str) -> bool:
         """Runs the lint-repair-verify loop for a single file."""
         for attempt in range(self.max_attempts):
-            self.logger.info(f"Debugging attempt {attempt + 1}/{self.max_attempts} for {file_path}")
+            self.logger.info(f"Debugging attempt {attempt + 1}/{self.max_attempts} for {os.path.basename(file_path)}")
             errors = self._run_linter(file_path)
             if not errors:
                 return True
@@ -78,7 +74,7 @@ class DebuggingAgent:
                 response = ollama.chat(model=self.model, messages=[{'role': 'user', 'content': prompt}])
                 fixed_code = response['message']['content'].strip().replace("```python", "").replace("```", "")
                 
-                with open(file_path, 'w', encoding='utf--8') as f:
+                with open(file_path, 'w', encoding='utf-8') as f:
                     f.write(fixed_code)
                 self.logger.info("Applied LLM's fix. Re-verifying...")
             except Exception as e:
@@ -94,10 +90,13 @@ class DebuggingAgent:
             return False
 
     def debug_codebase(self, project_path: str) -> bool:
-        """Finds all Python files in a directory and attempts to debug them."""
+        """Finds all Python files in a directory and attempts to debug them, excluding venv."""
         self.logger.info(f"Starting to debug codebase at: {project_path}")
         all_files_ok = True
-        for root, _, files in os.walk(project_path):
+        for root, dirs, files in os.walk(project_path):
+            # THE FIX: Exclude virtual environment and hidden directories from the scan
+            dirs[:] = [d for d in dirs if not d.startswith('.') and d not in ['venv', '__pycache__']]
+            
             for file in files:
                 if file.endswith('.py'):
                     if not self._debug_file(os.path.join(root, file)):

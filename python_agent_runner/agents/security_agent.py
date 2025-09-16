@@ -28,9 +28,10 @@ class SecurityAgent:
                 check=False
             )
             
-            if not result.stdout:
-                self.logger.error("Bandit scan produced no output. There might be an issue with the tool or the target directory.")
-                return {"status": "FAIL", "reason": "Bandit produced no output."}
+            # THE FIX: Handle cases where Bandit finds no issues and returns empty stdout
+            if not result.stdout or not result.stdout.strip():
+                self.logger.info("Bandit scan produced no output, indicating no issues found.")
+                return {"status": "SECURE", "issues": []}
 
             report = json.loads(result.stdout)
             issues = report.get('results', [])

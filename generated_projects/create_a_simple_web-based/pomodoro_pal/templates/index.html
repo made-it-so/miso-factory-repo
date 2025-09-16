@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pomodoro Pal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        
+        .container {
+            width: 80%;
+            margin: 40px auto;
+            text-align: center;
+        }
+        
+        .timer-inputs {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .timer-input {
+            width: calc(50% - 10px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Pomodoro Pal</h1>
+        <form id="pomodoro-form">
+            <div class="timer-inputs">
+                <input type="number" id="work-time" placeholder="Work Time (minutes)" class="timer-input">
+                <input type="number" id="break-time" placeholder="Break Time (minutes)" class="timer-input">
+            </div>
+            <button id="start-pomodoro">Start Pomodoro</button>
+        </form>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/pomodoro.js') }}"></script>
+</body>
+</html>
