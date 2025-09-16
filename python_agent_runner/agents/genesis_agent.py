@@ -82,7 +82,7 @@ class GenesisAgent:
         self.debugging_agent.debug_codebase(project_path)
         
         self.logger.info("Phase 5: Security Scan...")
-        sec_report = self.security_agent.scan_codebase(project_path)
+        sec_report = self.security_agent.static_scan(project_path)
         if sec_report.get("status") == "INSECURE":
             return {"status": "SUCCESS_WITH_SECURITY_WARNINGS", "reason": "Codebase generated, but security issues were found.", "output_path": project_path, "security_report": sec_report}
 
