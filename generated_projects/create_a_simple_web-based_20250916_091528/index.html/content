@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+    <!-- CSS only -->
+    <link href="styles.css" rel="stylesheet">
+    <!-- JavaScript files -->
+    <script src="script.js"></script>
+    <style>
+        /* add some basic styling here if needed */
+    </style>
+</head>
+<body>
+    <!-- Your UI content will go here -->
+    <h1>Welcome to Index!</h1>
+    <div id="main-content">
+        
+    </div>
+    <!-- JavaScript code will interact with this element -->
+    <script>
+        // write your JavaScript code here
+    </script>
+</body>
+</html>

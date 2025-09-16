@@ -1,27 +1,27 @@
 version: '3.8'
 
 services:
-  # The Python/Flask application service
-  miso_app:
-    # THIS IS THE CORRECTED BUILD CONFIGURATION
-    # It tells Docker to look inside the python_agent_runner folder for the files.
+  # The Python/FastAPI Backend Service
+  api:
     build:
-      context: ./python_agent_runner
-      dockerfile: Dockerfile
-    # This exposes the application's port for Nginx to connect to.
-    # It does NOT make it accessible from the outside world.
-    expose:
-      - "5000"
-
-  # The Nginx reverse proxy service
-  nginx:
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: Dockerfile.api
     ports:
-      # This maps port 80 from your server to port 80 in the Nginx container,
-      # making your application accessible via the server's IP address.
-      - "80:80"
-    # This ensures that Nginx will only start after the miso_app is running.
+      - "8000:8000"
+    volumes:
+      # Persist the database and generated projects outside the container
+      - ./miso_data.db:/app/miso_data.db
+      - ./generated_projects:/app/generated_projects
+    env_file:
+      - .env
+
+  # The JavaScript/React/Nginx Frontend Service
+  ui:
+    build:
+      context: .
+      dockerfile: Dockerfile.ui
+    ports:
+      # Map the container's Nginx port 80 to our usual port 5173
+      - "5173:80"
     depends_on:
-      - miso_app
+      - api

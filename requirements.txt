@@ -1,0 +1,21 @@
+
+# Core API Requirements
+fastapi
+uvicorn[standard]
+
+
+# Security Requirements
+python-jose[cryptography]
+passlib
+bcrypt==3.2.0
+pydantic-settings
+
+
+# HTTP Client for Spokes
+requests
+
+
+# Database ORM
+sqlalchemy
+
+python-multipart

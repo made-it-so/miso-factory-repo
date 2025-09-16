@@ -1,6 +1,7 @@
 import logging
 import os
 import json
+from datetime import datetime
 from .planning_agent import PlanningAgent
 from .simulation_agent import SimulationAgent
 from .code_generation_agent import CodeGenerationAgent
@@ -23,7 +24,7 @@ class GenesisAgent:
         os.makedirs(self.output_dir, exist_ok=True)
 
     def _create_project_files(self, project_path: str, file_structure: dict) -> bool:
-        # (Implementation is unchanged)
+        """Recursively creates project files, building and passing context."""
         project_context = {}
         try:
             def process_level(current_path, structure):
@@ -48,11 +49,14 @@ class GenesisAgent:
             return False
 
     def create_codebase(self, proposal: dict):
-        project_name = proposal.get('project_name', 'untitled_project').replace(' ', '_').lower()
+        base_project_name = proposal.get('project_name', 'untitled_project').replace(' ', '_').lower()
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        project_name_unique = f"{base_project_name}_{timestamp}"
+        
         objective = proposal.get("objective", "No objective provided.")
-        project_path = os.path.join(self.output_dir, project_name)
+        project_path = os.path.join(self.output_dir, project_name_unique)
 
-        self.logger.info(f"--- Starting New Project: {project_name} ---")
+        self.logger.info(f"--- Starting New Project: {project_name_unique} ---")
         
         # 1. PLAN
         self.logger.info("Phase 1: Planning...")
@@ -69,11 +73,8 @@ class GenesisAgent:
         self.logger.info("Phase 3: Code Generation...")
         file_structure = plan.get("file_structure")
         
-        # THE FIX: Validate that the file structure exists and is not empty.
         if not file_structure or not isinstance(file_structure, dict) or not file_structure:
-            self.logger.error("Planning Agent produced an empty or invalid plan. Halting.")
             return {"status": "FAIL", "reason": "Planning Agent produced an empty or invalid plan."}
-
         if not self._create_project_files(project_path, file_structure):
             return {"status": "FAIL", "reason": "Code generation failed."}
 
@@ -82,7 +83,7 @@ class GenesisAgent:
         self.debugging_agent.debug_codebase(project_path)
         
         self.logger.info("Phase 5: Security Scan...")
-        sec_report = self.security_agent.static_scan(project_path)
+        sec_report = self.security_agent.scan_codebase(project_path)
         if sec_report.get("status") == "INSECURE":
             return {"status": "SUCCESS_WITH_SECURITY_WARNINGS", "reason": "Codebase generated, but security issues were found.", "output_path": project_path, "security_report": sec_report}
 

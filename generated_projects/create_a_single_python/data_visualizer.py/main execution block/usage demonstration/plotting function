@@ -1,0 +1,12 @@
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+def plot_calculated_areas(areas):
+    sns.set()
+    plt.figure(figsize=(10,6))
+    plt.bar(range(len(areas)), areas)
+    plt.xlabel('Index')
+    plt.ylabel('Calculated Area')
+    plt.title('Calculated Areas Visualization')
+    plt.show()

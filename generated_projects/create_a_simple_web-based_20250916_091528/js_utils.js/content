@@ -1,0 +1,46 @@
+
+function capitalizeFirstLetter(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function slugifyText(text) {
+    return text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/gi, '');
+}
+
+function trimWhitespace(str) {
+    return str.replace(/^\s+|\s+$/g, '');
+}
+
+function escapeHtml(html) {
+    const amp = '&';
+    const apos = '\'';
+    const quot = '"';
+    const lt = '<';
+    const gt = '>';
+    let output = html;
+    output = output.replace(/&/gi, amp);
+    output = output.replace(/'/gi, apos);
+    output = output.replace(/"/gi, quot);
+    output = output.replace(/>/gi, gt);
+    output = output.replace(/</gi, lt);
+    return output;
+}
+
+function unescapeHtml(html) {
+    const amp = '&';
+    const apos = '\'';
+    const quot = '"';
+    const lt = '<';
+    const gt = '>';
+    let output = html;
+    output = output.replace(amp, '&');
+    output = output.replace(apos, "'");
+    output = output.replace(quot, '"');
+    output = output.replace(gt, '>');
+    output = output.replace(lt, '<');
+    return output;
+}
+
+function isNullOrUndefined(value) {
+    return value === null || value === undefined;
+}

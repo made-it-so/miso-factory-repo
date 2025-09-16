@@ -1,0 +1,30 @@
+
+from flask import Flask, render_template, request, jsonify
+import time
+
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/start', methods=['POST'])
+def start_timer():
+    if request.method == 'POST':
+        timer_status = {'status': True}
+        return jsonify(timer_status)
+
+@app.route('/stop', methods=['POST'])
+def stop_timer():
+    if request.method == 'POST':
+        timer_status = {'status': False}
+        return jsonify(timer_status)
+
+@app.route('/reset', methods=['POST'])
+def reset_timer():
+    if request.method == 'POST':
+        timer_status = {'status': None}
+        return jsonify(timer_status)
+
+if __name__ == '__main__':
+    app.run(debug=True)
