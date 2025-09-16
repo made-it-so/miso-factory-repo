@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MISO Alpha Portal</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; background-color: #f7f7f7; color: #333; margin: 0; padding: 2rem; }
+        .container { max-width: 800px; margin: auto; background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: 1px solid #e0e0e0; }
+        h1 { padding: 2rem 2rem 0 2rem; margin:0; }
+        h2 { margin-top: 0; }
+        textarea, select { width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #ccc; font-size: 16px; margin-bottom: 1rem; box-sizing: border-box; }
+        button { background-color: #007aff; color: white; padding: 10px 20px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
+        button:disabled { background-color: #ccc; cursor: not-allowed; }
+        .tabs { border-bottom: 1px solid #ccc; padding: 0 2rem; }
+        .tab-button { background: none; border: none; padding: 12px 18px; font-size: 16px; cursor: pointer; color: #555; border-bottom: 3px solid transparent; }
+        .tab-button.active { color: #007aff; border-bottom: 3px solid #007aff; font-weight: 600; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; padding: 2rem; }
+        .log-area { background-color: #1a1a1a; color: #f0f0f0; padding: 1rem; border-radius: 4px; margin-top: 1rem; white-space: pre-wrap; font-family: "SF Mono", monospace; font-size: 14px; max-height: 500px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>MISO Alpha Portal</h1>
+        <div class="tabs">
+            <button class="tab-button active" data-tab="create">Create Project</button>
+            <button class="tab-button" data-tab="query">Ask MISO</button>
+            <button class="tab-button" data-tab="feedback">Provide Feedback</button>
+        </div>
+
+        <div id="create" class="tab-content active">
+            <h2>Create a New Project</h2>
+            <form id="objective-form"><textarea id="objective-text" rows="5"></textarea><button id="submit-btn" type="submit">Make It So</button></form>
+            <div id="log-container" class="log-area" style="display: none;"></div>
+        </div>
+
+        <div id="query" class="tab-content">
+            <h2>Ask MISO About Itself</h2>
+            <form id="query-form"><textarea id="query-text" rows="3"></textarea><button id="query-btn" type="submit">Ask Question</button></form>
+            <div id="query-result" class="log-area" style="display: none;"></div>
+        </div>
+
+        <div id="feedback" class="tab-content">
+            <h2>Provide Feedback</h2>
+            <p>Your feedback is critical for MISO's evolution. Please rate your last experience and provide comments.</p>
+            <form id="feedback-form">
+                <label for="rating">Overall Satisfaction (1-5):</label>
+                <select id="rating" name="rating" required>
+                    <option value="5">5 - Excellent</option>
+                    <option value="4">4 - Good</option>
+                    <option value="3">3 - Average</option>
+                    <option value="2">2 - Poor</option>
+                    <option value="1">1 - Very Poor</option>
+                </select>
+                <label for="comments">Comments:</label>
+                <textarea id="comments" rows="5" placeholder="What worked well? What could be improved?"></textarea>
+                <button id="feedback-btn" type="submit">Submit Feedback</button>
+            </form>
+            <div id="feedback-status" class="log-area" style="display: none; color: #34c759;"></div>
+        </div>
+    </div>
+    <script src="/static/portal.js"></script>
+</body>
+</html>
