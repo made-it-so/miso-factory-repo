@@ -1,7 +1,4 @@
-version: '3.8'
-
 services:
-  # The Python/FastAPI Backend Service
   api:
     build:
       context: .
@@ -9,19 +6,16 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      # Persist the database and generated projects outside the container
       - ./miso_data.db:/app/miso_data.db
       - ./generated_projects:/app/generated_projects
-    env_file:
-      - .env
+    environment:
+      - SQS_QUEUE_URL=
 
-  # The JavaScript/React/Nginx Frontend Service
   ui:
     build:
       context: .
       dockerfile: Dockerfile.ui
     ports:
-      # Map the container's Nginx port 80 to our usual port 5173
       - "5173:80"
     depends_on:
       - api

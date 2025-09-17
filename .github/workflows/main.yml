@@ -1,0 +1,28 @@
+# Name of the GitHub Actions workflow
+name: MISO Platform CI/CD
+
+# Controls when the workflow will run
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build and Run Services
+        env:
+          SQS_QUEUE_URL: $""{{ secrets.SQS_QUEUE_URL }} # Use the secret we created
+        run: docker-compose up --build -d
+
+      - name: Test API Health Check
+        run: |
+          sleep 10
+          curl --fail http://localhost:8000/
+          
+      - name: Shutdown Services
+        if: always()
+        run: docker-compose down
