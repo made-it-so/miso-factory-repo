@@ -8,21 +8,28 @@ on:
 
 jobs:
   build-and-test:
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      # Step 1: Check out your repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Step 2: Build and run the Docker Compose services
       - name: Build and Run Services
         env:
-          SQS_QUEUE_URL: $""{{ secrets.SQS_QUEUE_URL }} # Use the secret we created
-        run: docker-compose up --build -d
+          SQS_QUEUE_URL: $""{{ secrets.SQS_QUEUE_URL }}
+        run: docker compose up --build -d
 
+      # Step 3: Wait and run a health check
       - name: Test API Health Check
         run: |
           sleep 10
           curl --fail http://localhost:8000/
           
+      # Step 4: Clean up and stop the services
       - name: Shutdown Services
         if: always()
-        run: docker-compose down
+        run: docker compose down
